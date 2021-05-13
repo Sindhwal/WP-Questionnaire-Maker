@@ -4,7 +4,7 @@
  * Description: WP Questionnaire Maker allows user to create a questionnaire form through multi selection form flow.
  * Version: 1.0
  * Author: Pawan Sindhwal
- * Licence: GNU 2.0+
+ * License: GNU 2.0+
  * 
  */
 
@@ -25,8 +25,24 @@
 
     public function __construct(){
         register_activation_hook( WPQM_FILE , array($this, "wpqm_activation"));
+        add_action('plugins_loaded', array($this, 'include_required_files') );
+        add_action("admin_menu", array($this, "create_option_menus"));
+
     }
 
+
+    public function include_required_files(){
+
+        require WPQM_DIR . "/inc/cmb2/init.php";
+        require WPQM_DIR . "/inc/wpqm-generate-cpt.php";
+        require WPQM_DIR . "/inc/wpqm-addition-fields.php";
+        require WPQM_DIR . "/inc/wpqm-shortcodes.php";
+
+    }
+
+    public function create_option_menus(){
+
+    }
 
     /**
      * put all the initialization process here.
