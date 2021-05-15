@@ -36,6 +36,7 @@
         require WPQM_DIR . "/inc/cmb2/init.php";
         require WPQM_DIR . "/inc/wpqm-generate-cpt.php";
         require WPQM_DIR . "/inc/wpqm-addition-fields.php";
+        require WPQM_DIR . "/inc/wpqm-lib.php";
         require WPQM_DIR . "/inc/wpqm-shortcodes.php";
 
     }

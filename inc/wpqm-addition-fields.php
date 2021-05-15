@@ -20,7 +20,7 @@
 
         $option_page = new_cmb2_box( array(
             'id'           => 'wpqm_options',
-            'title'        => esc_html__( 'Site Options', 'myprefix' ),
+            'title'        => esc_html__( 'General Options', 'myprefix' ),
             'object_types' => array( 'options-page' ),
             /*
              * The following parameters are specific to the options-page box
