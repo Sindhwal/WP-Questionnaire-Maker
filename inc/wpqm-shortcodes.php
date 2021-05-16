@@ -23,31 +23,58 @@
 
         ob_start();
 
-        echo "<div id='wpqm-questionnaire-slider' class='carousel slide' data-wrap='false'>";
-        echo "<div class='carousel-inner'>";
+        echo "<div id='wpqm-questionnaire-container'>";
 
-        echo "<div class='carousel-item active'>";
+        echo "<div class='form-card active first-card'>";
             echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpqm-intros" );
         echo "</div>";
 
-        echo "<div class='carousel-item'>";
+        echo "<div class='form-card'>";
             echo $this->create_section_panel( "Transitional & Verification Questions", "transitional_and_verification_question", "wpqm-transitional" );
         echo "</div>";
 
-        echo "<div class='carousel-item'>";
+        echo "<div class='form-card'>";
             echo $this->create_section_panel( "Technical Questions", "technical_question", "wpqm-technicals" );
         echo "</div>";
 
+        echo "<div class='form-card last-card'>";
+            echo $this->create_core_competencies( "Core Competencies" );
         echo "</div>";
 
-        echo "<button class='btn btn-primary wpqm-conitue-btn'>Continue</button>";
-
+        echo "<div id='wpqm-questionnaire-controller'>";
+            echo "<button class='btn btn-secondary wpqm-back-btn' disabled='disabled'>Back</button>";
+            echo "<button class='btn btn-primary wpqm-conitue-btn'>Continue</button>";
+        echo "</div>";  // end of button container
+      
         echo "</div>";
         
         return ob_get_clean();
 
     }
 
+    function create_core_competencies( $title ){
+
+        $competencies = wpqm_lib::gather_all_core_competencies();
+        echo "<div><h2>". $title . "</h2>";
+
+        echo "<ul class='wpqm-main-container core_competencies_list'>";
+
+        foreach( $competencies as $comp ){
+
+            echo "<li>";
+
+            echo $this->display_checkbox_options($comp['slug'],$comp['name'],$comp['slug'] );
+
+            echo "</li>";
+
+        }
+        
+        echo "</ul>";
+
+
+        echo "</div>";
+
+    }
 
     /**
      * 

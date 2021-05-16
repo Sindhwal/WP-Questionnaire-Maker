@@ -26,7 +26,6 @@
     public function __construct(){
         register_activation_hook( WPQM_FILE , array($this, "wpqm_activation"));
         add_action('plugins_loaded', array($this, 'include_required_files') );
-        add_action("admin_menu", array($this, "create_option_menus"));
 
     }
 
@@ -38,10 +37,6 @@
         require WPQM_DIR . "/inc/wpqm-addition-fields.php";
         require WPQM_DIR . "/inc/wpqm-lib.php";
         require WPQM_DIR . "/inc/wpqm-shortcodes.php";
-
-    }
-
-    public function create_option_menus(){
 
     }
 

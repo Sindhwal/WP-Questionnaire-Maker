@@ -91,3 +91,28 @@ ul.wpqm-main-container {
 ul.wpqm-main-container li {
     position: relative;
 }
+
+.form-card {
+    background: white;
+    border: 0 none;
+    border-radius: 0px;
+    box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
+    padding: 20px 40px 30px 40px;
+    box-sizing: border-box;
+    width: 94%;
+    margin: 0 3% 20px 3%;
+    position: relative
+}
+
+.form-card:not(.active) {
+    display: none;
+}
+
+div#wpqm-questionnaire-controller {
+    width: 400px;
+    margin: 0 auto;
+}
+
+div#wpqm-questionnaire-controller .wpqm-conitue-btn {
+    float: right;
+}
