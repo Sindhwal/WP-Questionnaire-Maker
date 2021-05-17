@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&family=Sen:wght@400;700;800&display=swap");
-ul.wpqm-main-container.wpqm-main-container {
+ul.wpid-main-container.wpid-main-container {
     list-style: none;
 }
 
@@ -9,7 +9,7 @@ ul.wpqm-main-container.wpqm-main-container {
     box-sizing: border-box;
 }
 
-.wpqm-main-container {
+.wpid-main-container {
     background-color: hsl(0, 0%, 91%);
     color: hsla(0, 0%, 27%, 1);
     display: grid;
@@ -17,7 +17,7 @@ ul.wpqm-main-container.wpqm-main-container {
     padding: 0.75rem;
 }
 
-label.wpqm-label {
+label.wpid-label {
     padding: 0.75rem 1rem 0.75rem calc(1.2rem * 2.25);
     display: inline-block;
     font-size: 17px;
@@ -27,42 +27,41 @@ label.wpqm-label {
     cursor: pointer;
 }
 
-label.wpqm-label:hover {
+label.wpid-label:hover {
     border-bottom-color: hsl(0, 0%, 68%);
 }
 
-input.wpqm-checkbox {
+input.wpid-checkbox {
     -webkit-appearance: none;
     width: 1.25rem;
     height: 1.25rem;
     border: 1px solid hsl(0, 0%, 85%);
     border-radius: 1px;
-    vertical-align: sub;
+    vertical-align: initial;
     position: absolute;
-    top: 50%;
+    top: 45%;
     transform: translateY(-50%);
-    left: 1rem;
     outline: none;
 }
 
-input.wpqm-checkbox:checked {
+input.wpid-checkbox:checked {
     background-color: hsl(0, 0%, 40%);
     border-color: hsl(0, 0%, 40%);
 }
 
-input.wpqm-checkbox:checked+label {
+input.wpid-checkbox:checked+label {
     color: hsl(0, 0%, 70%);
     font-weight: 600;
     background-color: hsl(0, 0%, 97%);
 }
 
-input.wpqm-checkbox:checked:focus,
-input.wpqm-checkbox:checked:hover {
+input.wpid-checkbox:checked:focus,
+input.wpid-checkbox:checked:hover {
     box-shadow: 0 0 0 3px hsl(0, 0%, 85%);
     border-color: hsl(0, 0%, 40%);
 }
 
-input.wpqm-checkbox:after {
+input.wpid-checkbox:after {
     content: "";
     width: 100%;
     height: 100%;
@@ -75,20 +74,20 @@ input.wpqm-checkbox:after {
     background-position: center;
 }
 
-input.wpqm-checkbox:focus,
-input.wpqm-checkbox:hover {
+input.wpid-checkbox:focus,
+input.wpid-checkbox:hover {
     box-shadow: 0 0 0 3px hsl(0, 0%, 92%);
     border-color: hsl(0, 0%, 55%);
 }
 
-ul.wpqm-main-container {
+ul.wpid-main-container {
     list-style: none;
     margin: 0;
     background: #ffffff;
     padding: 0;
 }
 
-ul.wpqm-main-container li {
+ul.wpid-main-container li {
     position: relative;
 }
 
@@ -97,22 +96,29 @@ ul.wpqm-main-container li {
     border: 0 none;
     border-radius: 0px;
     box-shadow: 0 2px 2px 2px rgba(0, 0, 0, 0.2);
-    padding: 20px 40px 30px 40px;
+    padding: 20px 20px 20px 20px;
     box-sizing: border-box;
     width: 94%;
     margin: 0 3% 20px 3%;
-    position: relative
+    position: relative;
+    min-height: 450px;
+    max-height: 550px;
+    overflow: auto;
 }
 
 .form-card:not(.active) {
     display: none;
 }
 
-div#wpqm-questionnaire-controller {
-    width: 400px;
-    margin: 0 auto;
+div#wpid-questionnaire-controller {
+    margin: 10px 20px 20px 0px;
+    float: right;
 }
 
-div#wpqm-questionnaire-controller .wpqm-conitue-btn {
+div#wpid-questionnaire-controller button{
+    margin: 10px;
+}
+
+div#wpid-questionnaire-controller .wpid-conitue-btn {
     float: right;
 }

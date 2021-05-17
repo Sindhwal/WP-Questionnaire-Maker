@@ -12,10 +12,10 @@
      die("Wordpress enviornment not found!");
  }
 
- define("WPQM_V", "1.0");
- define("WPQM_FILE", __FILE__ );
- define("WPQM_DIR", plugin_dir_path( WPQM_FILE ) );
- define("WPQM_URL", plugin_dir_url( WPQM_FILE ) );
+ define("WPID_V", "1.0");
+ define("WPID_FILE", __FILE__ );
+ define("WPID_DIR", plugin_dir_path( WPID_FILE ) );
+ define("WPID_URL", plugin_dir_url( WPID_FILE ) );
 
 
  /**
@@ -24,7 +24,7 @@
  class wp_questionnaire_maker{
 
     public function __construct(){
-        register_activation_hook( WPQM_FILE , array($this, "wpqm_activation"));
+        register_activation_hook( WPID_FILE , array($this, "wpid_activation"));
         add_action('plugins_loaded', array($this, 'include_required_files') );
 
     }
@@ -32,18 +32,19 @@
 
     public function include_required_files(){
 
-        require WPQM_DIR . "/inc/cmb2/init.php";
-        require WPQM_DIR . "/inc/wpqm-generate-cpt.php";
-        require WPQM_DIR . "/inc/wpqm-addition-fields.php";
-        require WPQM_DIR . "/inc/wpqm-lib.php";
-        require WPQM_DIR . "/inc/wpqm-shortcodes.php";
+        require WPID_DIR . "/inc/cmb2/init.php";
+        require WPID_DIR . "/inc/wpid-generate-cpt.php";
+        require WPID_DIR . "/inc/wpid-addition-fields.php";
+        require WPID_DIR . "/inc/wpid-ajax-request.php";
+        require WPID_DIR . "/inc/wpid-lib.php";
+        require WPID_DIR . "/inc/wpid-shortcodes.php";
 
     }
 
     /**
      * put all the initialization process here.
      */
-    public function wpqm_activation(){
+    public function wpid_activation(){
 
 
     }

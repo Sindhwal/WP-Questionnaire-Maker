@@ -5,11 +5,11 @@
  * 
  */
 
- class wpqm_shortcodes{
+ class wpid_shortcodes{
 
     public function __construct(){
 
-        add_shortcode("wpqm_questionnaire", array($this, "generate_main_shortcode"));
+        add_shortcode("wpid-questionnaire", array($this, "generate_main_shortcode"));
 
         add_action("wp_enqueue_scripts", array($this, "wp_enqueue_styles") );
 
@@ -23,27 +23,31 @@
 
         ob_start();
 
-        echo "<div id='wpqm-questionnaire-container'>";
+        echo "<div id='wpid-questionnaire-container'>";
 
         echo "<div class='form-card active first-card'>";
-            echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpqm-intros" );
+            echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpid-intros" );
         echo "</div>";
 
         echo "<div class='form-card'>";
-            echo $this->create_section_panel( "Transitional & Verification Questions", "transitional_and_verification_question", "wpqm-transitional" );
+            echo $this->create_section_panel( "Transitional & Verification Questions", "transitional_and_verification_question", "wpid-transitional" );
         echo "</div>";
 
         echo "<div class='form-card'>";
-            echo $this->create_section_panel( "Technical Questions", "technical_question", "wpqm-technicals" );
+            echo $this->create_section_panel( "Technical Questions", "technical_question", "wpid-technicals" );
         echo "</div>";
 
-        echo "<div class='form-card last-card'>";
-            echo $this->create_core_competencies( "Core Competencies" );
+        echo "<div class='form-card'>";
+            echo $this->create_core_competencies( "Position Core Competencies" );
         echo "</div>";
 
-        echo "<div id='wpqm-questionnaire-controller'>";
-            echo "<button class='btn btn-secondary wpqm-back-btn' disabled='disabled'>Back</button>";
-            echo "<button class='btn btn-primary wpqm-conitue-btn'>Continue</button>";
+        echo "<div class='form-card last-card request-competencies'>";
+            
+        echo "</div>";
+
+        echo "<div id='wpid-questionnaire-controller'>";
+            echo "<button class='btn btn-primary wpid-back-btn' disabled='disabled'>Back</button>";
+            echo "<button class='btn btn-primary wpid-conitue-btn'>Continue</button>";
         echo "</div>";  // end of button container
       
         echo "</div>";
@@ -52,18 +56,21 @@
 
     }
 
+    /**
+     * create core competencies panel
+     */
     function create_core_competencies( $title ){
 
-        $competencies = wpqm_lib::gather_all_core_competencies();
-        echo "<div><h2>". $title . "</h2>";
+        $competencies = wpid_lib::gather_all_core_competencies();
+        echo "<div><h2 class='section-title'>". $title . "</h2>";
 
-        echo "<ul class='wpqm-main-container core_competencies_list'>";
+        echo "<ul class='wpid-main-container core_competencies_list'>";
 
         foreach( $competencies as $comp ){
 
             echo "<li>";
 
-            echo $this->display_checkbox_options($comp['slug'],$comp['name'],$comp['slug'] );
+            echo wpid_lib::display_checkbox_options($comp['slug'],$comp['name'],$comp['slug'] );
 
             echo "</li>";
 
@@ -76,13 +83,14 @@
 
     }
 
+
     /**
      * 
      * This function create a section HTML for frontend
      */
     function create_section_panel( $title, $option_name, $class_name ){
 
-        $all_options = wpqm_lib::general_options_array( "wpqm_all_" . $option_name . "s" ) ;
+        $all_options = wpid_lib::general_options_array( "wpid_all_" . $option_name . "s" ) ;
 
         $no = 1;
         
@@ -90,11 +98,11 @@
 
             echo "<div><h2>". $title . "</h2>";
 
-            echo "<ul class='wpqm-main-container ". $option_name."_list'>";
+            echo "<ul class='wpid-main-container ". $option_name."_list'>";
             foreach( $all_options as $quest ){
                 
                 echo "<li>";
-                    echo $this->display_checkbox_options( $class_name , $quest['wpqm_'. $option_name ], $class_name. '-' .$no );
+                    echo wpid_lib::display_checkbox_options( $class_name , $quest['wpid_'. $option_name ], $class_name. '-' .$no );
                 echo "</li>";
 
                 $no++;
@@ -107,32 +115,24 @@
 
     }
 
-    /**
-     * 
-     * Create single checkbox element
-     */
-    function display_checkbox_options( $class, $text, $id ){
-
-        $id_html = ( isset($id) && !empty($id) ) ? "id='".$id."'" : "";
-        $name_html = ( isset($id) && !empty($id) ) ? "name='".$id."'" : "";
-
-        $class_html = ( isset($class) && !empty($class) ) ? "class='wpqm-checkbox ".$class."'" : "";
-
-        return "<input value='". $text ."' type='checkbox' ".$class_html." ".$name_html ." ". $id_html." /><label class='wpqm-label' for='".$id."'>". $text ."</label>";
-
-    }
-
 
     function wp_enqueue_styles(){
         
-        wp_enqueue_style( "wpqm-bootstrap", "https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css", null, WPQM_V );
-        wp_enqueue_style("wpqm-general-style", WPQM_URL . "/assets/css/style.css", null, WPQM_V );
+        wp_enqueue_style( "wpid-bootstrap", "https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css", null, WPID_V );
+        wp_enqueue_style("wpid-general-style", WPID_URL . "assets/css/style.css", null, WPID_V );
 
-        wp_enqueue_script( "wpqm-bootstra-script", "https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js", array('jquery'), WPQM_V, true);
-        
-        wp_enqueue_script( "wpqm-main-script", WPQM_URL . "/assets/js/script.js", array('jquery'), WPQM_V, true);
+        wp_enqueue_script( "wpid-bootstra-script", "https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js", array('jquery'), WPID_V, true);
+               
+        wp_enqueue_script( "wpid-main-script", WPID_URL . "assets/js/script.js", array('jquery'), WPID_V, true);
+
+        wp_localize_script( "wpid-main-script" , "wpid_data", array(
+            
+            "ajaxurl"=> admin_url( "admin-ajax.php" ),
+            "wpid_nonce"=> wp_create_nonce( "wpid_request_competencies_qa" )
+
+        ) );
 
     }
 
  }
- new wpqm_shortcodes();
+ new wpid_shortcodes();

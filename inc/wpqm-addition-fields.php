@@ -6,7 +6,7 @@
  * 
  */
 
- class wpqm_addition_fields{
+ class wpid_addition_fields{
 
 
     public function __construct(){
@@ -19,7 +19,7 @@
     public function init_settings_page(){
 
         $option_page = new_cmb2_box( array(
-            'id'           => 'wpqm_options',
+            'id'           => 'wpid_options',
             'title'        => esc_html__( 'General Options', 'myprefix' ),
             'object_types' => array( 'options-page' ),
             /*
@@ -27,10 +27,10 @@
              * Several of these parameters are passed along to add_menu_page()/add_submenu_page().
              */
     
-            'option_key'      => 'wpqm_general', // The option key and admin menu page slug.
+            'option_key'      => 'wpid_general', // The option key and admin menu page slug.
             // 'icon_url'        => 'dashicons-palmtree', // Menu icon. Only applicable if 'parent_slug' is left empty.
             // 'menu_title'      => esc_html__( 'Options', 'myprefix' ), // Falls back to 'title' (above).
-             'parent_slug'     => 'edit.php?post_type=wpqm_questions', // Make options page a submenu item of the themes menu.
+             'parent_slug'     => 'edit.php?post_type=wpid_questions', // Make options page a submenu item of the themes menu.
             // 'capability'      => 'manage_options', // Cap required to view options-page.
             // 'position'        => 1, // Menu position. Only applicable if 'parent_slug' is left empty.
             // 'admin_menu_hook' => 'network_admin_menu', // 'network_admin_menu' to add network-level options page.
@@ -39,8 +39,7 @@
         ) );
 
 
-        $group_fields = array( "introductory_question", "transitional_and_verification_question", "technical_question" );
-
+        $group_fields = array( "introductory_question", "transitional_and_verification_question", "technical_question","closing_question" );
 
         foreach( $group_fields as $field_name ){
             $option_page->add_field(
@@ -52,7 +51,7 @@
             );
 
             $group_field_id = $option_page->add_field( array(
-                'id'          => 'wpqm_all_' . $field_name . 's',
+                'id'          => 'wpid_all_' . $field_name . 's',
                 'type'        => 'group',
                 // 'repeatable'  => false, // use false if you want non-repeatable group
                 'options'     => array(
@@ -66,7 +65,7 @@
             ) );
 
             $option_page->add_group_field( $group_field_id, array(
-                "id"=>"wpqm_" . $field_name,
+                "id"=>"wpid_" . $field_name,
                 "type"=>"textarea_small",
                 "name"=>"Question"
             ));
@@ -76,4 +75,4 @@
 
 
  }
- new wpqm_addition_fields();
+ new wpid_addition_fields();

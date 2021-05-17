@@ -4,7 +4,7 @@
  * This is a library file contains all common functions for the plugin.
  */
 
- class wpqm_lib{
+ class wpid_lib{
 
 
     /**
@@ -14,11 +14,11 @@
         if ( function_exists( 'cmb2_get_option' ) ) {
             // Use cmb2_get_option as it passes through some key filters.
             
-            return cmb2_get_option( 'wpqm_general', $key, $default );
+            return cmb2_get_option( 'wpid_general', $key, $default );
         }
     
         // Fallback to get_option if CMB2 is not loaded yet.
-        $opts = get_option( 'wpqm_general', $default );
+        $opts = get_option( 'wpid_general', $default );
     
         $val = $default;
     
@@ -52,6 +52,21 @@
         }
 
         return $competencies;
+
+    }
+
+    /**
+     * 
+     * Create single checkbox element
+    */
+    public static function display_checkbox_options( $class, $text, $id ){
+
+        $id_html = ( isset($id) && !empty($id) ) ? "id='".$id."'" : "";
+        $name_html = ( isset($id) && !empty($id) ) ? "name='".$id."'" : "";
+
+        $class_html = ( isset($class) && !empty($class) ) ? "class='wpid-checkbox ".$class."'" : "";
+
+        return "<input data-slug='".$id."' value='". $text ."' type='checkbox' ".$class_html." ".$name_html ." ". $id_html." /><label class='wpid-label' for='".$id."'>". $text ."</label>";
 
     }
 

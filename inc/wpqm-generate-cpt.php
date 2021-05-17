@@ -5,9 +5,9 @@
  * 
  */
 
- class wpqm_generate_cpt{
+ class wpid_generate_cpt{
 
-    public $custom_post_types = array( "wpqm_questions" );
+    public $custom_post_types = array( "wpid_questions" );
 
     public function __construct(){
 
@@ -22,7 +22,7 @@
 
         foreach ($this->custom_post_types as $current_post) {
 
-            $label = ucwords( str_replace("wpqm_","", $current_post ) );
+            $label = ucwords( str_replace("wpid_","", $current_post ) );
             $singular_label = substr( $label, 0 , -1);
 
             $labels = array(
@@ -112,7 +112,7 @@
             'menu_name' => __($label),
         );
 
-        register_taxonomy( str_replace(" ","-", $taxonomy), 'wpqm_questions', array(
+        register_taxonomy( str_replace(" ","-", $taxonomy), 'wpid_questions', array(
             'hierarchical' => true,
             'labels' => $labels,
             'show_ui' => true,
@@ -124,4 +124,4 @@
     }
 
  }
- new wpqm_generate_cpt();
+ new wpid_generate_cpt();
