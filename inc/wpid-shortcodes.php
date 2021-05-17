@@ -41,8 +41,11 @@
             echo $this->create_core_competencies( "Position Core Competencies" );
         echo "</div>";
 
-        echo "<div class='form-card last-card request-competencies'>";
-            
+        echo "<div class='form-card request-competencies'>";
+        echo "</div>";
+
+        echo "<div class='form-card last-card'>";
+        echo $this->create_section_panel( "Closing Questions", "closing_question", "wpid-closing" );
         echo "</div>";
 
         echo "<div id='wpid-questionnaire-controller'>";
@@ -94,24 +97,27 @@
 
         $no = 1;
         
-        if( is_array( $all_options ) && count( $all_options ) > 0 ){
+        
+        echo "<div><h2>". $title . "</h2>";
+        
+        echo "<ul class='wpid-main-container ". $option_name."_list'>";
+        
+ 
+            if( is_array( $all_options ) && count( $all_options ) > 0 ){
+                foreach( $all_options as $quest ){
+                    
+                    echo "<li>";
+                        echo wpid_lib::display_checkbox_options( $class_name , $quest['wpid_'. $option_name ], $class_name. '-' .$no );
+                    echo "</li>";
 
-            echo "<div><h2>". $title . "</h2>";
-
-            echo "<ul class='wpid-main-container ". $option_name."_list'>";
-            foreach( $all_options as $quest ){
-                
-                echo "<li>";
-                    echo wpid_lib::display_checkbox_options( $class_name , $quest['wpid_'. $option_name ], $class_name. '-' .$no );
-                echo "</li>";
-
-                $no++;
+                    $no++;
+                }
+            }else{
+                echo "Does not found any entry in this section.";
             }
             echo "</ul>";
 
             echo "</div>";
-
-        }
 
     }
 
