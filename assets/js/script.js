@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
         
         et.preventDefault();
 
-        $("#wpid-questionnaire-container .form-card").each(
+        $("#wpid-questionnaire-container .form-card:not(.wpid-userinfo-section)").each(
             function (index, Obj) {
                 let title = $(Obj).find("div .section-title").text();
                 
@@ -39,6 +39,30 @@ jQuery(document).ready(function ($) {
         let $this = $(this);
         let currentEl = $this.parents().find(".form-card.active");
         let Next = currentEl.next();
+
+        if( currentEl.find(".wpid-info-section").length > 0 ){
+            console.log("That was a user info form");
+            let title = currentEl.find(".wpid-info-section #wpid-position-title").val();
+            let position_type = currentEl.find(".wpid-info-section #wpid-position-type").val();
+            let industry_name = currentEl.find(".wpid-info-section #wpid-industry-name").val();
+            
+            if( title == "" || position_type == "" || industry_name == "" ){
+                alert("This form can not be left blank!");
+                return;
+            }
+            $.ajax({
+                "url":wpid_data.ajaxurl,
+                "type":"POST",
+                "dataType":"JSON",
+                "data":{ "action":"wpid_update_user_meta","wpid_position_title":title,"wpid_position_type":position_type,"wpid_industry":industry_name },
+                "beforeSend":function(d){
+                    console.log("userdata is posted!");
+                }
+            }).then(function(data){
+
+            });
+
+        }
 
         if (Next.hasClass("last-card")) {
 

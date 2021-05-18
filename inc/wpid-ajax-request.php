@@ -11,6 +11,28 @@
     function __construct(){
 
       add_action( "wp_ajax_wpid_request_competencies_qa", array($this, "wpid_request_competencies_qa" ) );
+      
+      add_action( "wp_ajax_wpid_update_user_meta", array($this, "wpid_update_user_meta" ) );
+
+    }
+
+    function wpid_update_user_meta(){
+
+      $user_id = get_current_user_id();
+      
+      if ( ! current_user_can( 'edit_user', $user_id ) ) {
+         return false;
+     }
+
+     if ( isset( $_POST['wpid_position_title'] ) ) {
+         update_user_meta( $user_id, 'wpid_position_title', $_POST['wpid_position_title'] );
+     }
+     if ( isset( $_POST['wpid_position_type'] ) ) {
+         update_user_meta( $user_id, 'wpid_position_type', $_POST['wpid_position_type'] );
+     }
+     if ( isset( $_POST['wpid_industry'] ) ) {
+         update_user_meta( $user_id, 'wpid_industry', $_POST['wpid_industry'] );
+     }
 
     }
 

@@ -21,20 +21,37 @@
      */
     public function generate_main_shortcode( $atts, $content = null ){
 
+        $user_id = get_current_user_id();
+        $post_title = get_the_author_meta("wpid_position_title", $user_id );
+        $post_type = get_the_author_meta("wpid_position_type", $user_id );
+        $post_industry = get_the_author_meta("wpid_industry", $user_id );
+        
+        $enable_userinfo = false;
+
+        if( $post_title == null && $post_type == null && $post_industry == null ){
+            $enable_userinfo = true;
+        }
+
         ob_start();
 
         echo "<div id='wpid-questionnaire-container'>";
 
-    /* 
-        echo "<div class='form-card active first-card'>";
-            echo $this->create_position_info();
-        echo "</div>";
 
-    */
+        if( $post_title == null && $post_type == null && $post_industry == null ){
+            echo "<div class='form-card first-card active wpid-userinfo-section'>";
+                echo $this->create_position_info();
+            echo "</div>";
+            
+            echo "<div class='form-card'>";
+                echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpid-intros" );
+            echo "</div>";
+        }else{
 
         echo "<div class='form-card first-card active'>";
             echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpid-intros" );
         echo "</div>";
+
+        }
 
         echo "<div class='form-card'>";
             echo $this->create_section_panel( "Transitional & Verification Questions", "transitional_and_verification_question", "wpid-transitional" );
@@ -49,10 +66,15 @@
         echo "</div>";
 
         echo "<div class='form-card request-competencies'>";
+            /** KEEP THIS EMPTY | THIS DIV IS POPULATED BY DYNAMIC CONTENT ON FRONTEND **/
         echo "</div>";
 
         echo "<div class='form-card last-card'>";
-        echo $this->create_section_panel( "Closing Questions", "closing_question", "wpid-closing" );
+            echo $this->create_section_panel( "Closing Questions", "closing_question", "wpid-closing" );
+        echo "</div>";
+
+        echo "<div class='form-card last-card'>";
+            echo $this->create_final_section();
         echo "</div>";
 
         echo "<div id='wpid-questionnaire-controller'>";
@@ -69,6 +91,13 @@
 
 
     /**
+     * This function creates the final confirmation section for the form
+     */
+    function create_final_section(){
+
+    }
+
+    /**
      * This will create a position info for the maker
      */
     function create_position_info(){
@@ -76,14 +105,16 @@
         ob_start();
         ?>
         <div>
-        <h2 class=="section-title">Position Info</h2>
+        <h2 class="section-title">Position Info</h2>
         <p>This information is only collected once and will be able to be managed in your profile after you complete your first assessment</p>
-        <h3 class="section-ask">What Position Title are you hiring for?</h3>
-        <input type="text" id="">
-        <h3 class="section-ask">Position Type</h3>
-
-        <h3 class="section-ask">Industry</h3>
-
+            <div class="wpid-info-section">
+            <h3 class="section-ask">What Position Title are you hiring for?</h3>
+            <input type="text" id="wpid-position-title" class="form-control wpid-userinfo">
+            <h3 class="section-ask">Position Type</h3>
+            <input type="text" id="wpid-position-type" class="form-control wpid-userinfo">
+            <h3 class="section-ask">Industry</h3>
+            <input type="text" id="wpid-industry-name" class="form-control wpid-userinfo">
+            </div>
         </div>
         <?php
 

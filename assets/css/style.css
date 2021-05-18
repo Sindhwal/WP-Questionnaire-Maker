@@ -40,6 +40,7 @@ input.wpid-checkbox {
     vertical-align: initial;
     position: absolute;
     top: 45%;
+    left:10px;
     transform: translateY(-50%);
     outline: none;
 }
@@ -121,4 +122,14 @@ div#wpid-questionnaire-controller button{
 
 div#wpid-questionnaire-controller .wpid-conitue-btn {
     float: right;
+}
+
+.wpid-info-section {
+    margin: 0 auto;
+    display: block;
+    width: 90%;
+}
+
+.form-control.wpid-userinfo{
+    width:90%;
 }
