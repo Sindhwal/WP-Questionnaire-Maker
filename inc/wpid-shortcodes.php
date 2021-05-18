@@ -25,11 +25,14 @@
 
         echo "<div id='wpid-questionnaire-container'>";
 
+    /* 
         echo "<div class='form-card active first-card'>";
             echo $this->create_position_info();
         echo "</div>";
 
-        echo "<div class='form-card'>";
+    */
+
+        echo "<div class='form-card first-card active'>";
             echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpid-intros" );
         echo "</div>";
 
@@ -55,6 +58,7 @@
         echo "<div id='wpid-questionnaire-controller'>";
             echo "<button class='btn btn-primary wpid-back-btn' disabled='disabled'>Back</button>";
             echo "<button class='btn btn-primary wpid-conitue-btn'>Continue</button>";
+            echo "<button style='display:none;' class='btn btn-primary submit-selected-qa'>Submit</button>";
         echo "</div>";  // end of button container
       
         echo "</div>";

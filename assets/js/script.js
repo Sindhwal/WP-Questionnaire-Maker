@@ -3,25 +3,28 @@ jQuery(document).ready(function ($) {
     window.wpid_competencies_selection = [];
     window.wpid_competencies_request = [];
 
-    window.wpiq_selected_array = [];
+    window.wpid_selected_array = new Map();
 
 
     $(document).on("click", ".submit-selected-qa", function (et) {
+        let $this = $(this);
         
         et.preventDefault();
 
         $("#wpid-questionnaire-container .form-card").each(
             function (index, Obj) {
                 let title = $(Obj).find("div .section-title").text();
-                console.log("Title:" + $(Obj).find("div .section-title").text());
+                
                 let selections = [];
                 $(Obj).find("div .wpid-main-container li input:checked").each(function (inde, oj) {
                     selections.push($(oj).val());
-                    console.log("Selected: " + $(oj).val());
                 });
-                window.wpiq_selected_array[title] = selections;
+                    window.wpid_selected_array.set( title, selections );
             }
         );
+
+        $this.attr("disabled","disabled");
+
     });
 
 
@@ -35,7 +38,14 @@ jQuery(document).ready(function ($) {
 
         let $this = $(this);
         let currentEl = $this.parents().find(".form-card.active");
-        let Next = $this.parents().find(".form-card.active").next();
+        let Next = currentEl.next();
+
+        if (Next.hasClass("last-card")) {
+
+            $this.hide();
+            $(".submit-selected-qa").show();
+
+        }
 
         currentEl.removeClass("active");
 
@@ -58,12 +68,6 @@ jQuery(document).ready(function ($) {
 
         $(".wpid-back-btn").removeAttr("disabled");
 
-        if (Next.hasClass("last-card")) {
-
-            $this.text("Submit");
-            $this.addClass("submit-selected-qa");
-
-        }
         if (Next.find("ul.wpid-main-container").hasClass("core_competencies_list")) {
             if (Next.find("ul.wpid-main-container input:checked").length == 0) {
                 $this.attr("disabled", "disabled");
@@ -95,7 +99,6 @@ jQuery(document).ready(function ($) {
                 });
             }
         }
-
 
     });
 
@@ -155,9 +158,10 @@ jQuery(document).ready(function ($) {
             $this.attr("disabled", "disabled");
         }
 
-        if ($(".wpid-conitue-btn").hasClass("submit-selected-qa")) {
-            $(".wpid-conitue-btn").removeClass("submit-selected-qa");
-            $(".wpid-conitue-btn").text("Continue");
+        if ($(".wpid-conitue-btn").hide() ) {
+            $(".wpid-conitue-btn").show();
+            $(".submit-selected-qa").hide();
+            $(".submit-selected-qa").removeAttr("disabled");
         }
 
         $(".wpid-conitue-btn").removeAttr("disabled");

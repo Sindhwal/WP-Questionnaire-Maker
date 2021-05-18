@@ -38,7 +38,7 @@
             // 'save_button'     => esc_html__( 'Save Theme Options', 'myprefix' ), // The text for the options-page save button. Defaults to 'Save'.
         ) );
 
-
+/* 
         $option_page->add_field(
             array(
             'id'=>'title_for_position_type',
@@ -95,6 +95,9 @@
             "type"=>"text_medium",
             "name"=>"Industry"
         ));
+        
+        
+        */
 
      
 
