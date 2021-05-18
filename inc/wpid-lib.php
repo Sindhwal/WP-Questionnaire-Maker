@@ -65,8 +65,8 @@
         $name_html = ( isset($id) && !empty($id) ) ? "name='".$id."'" : "";
 
         $class_html = ( isset($class) && !empty($class) ) ? "class='wpid-checkbox ".$class."'" : "";
-
-        return "<input data-slug='".$id."' value='". $text ."' type='checkbox' ".$class_html." ".$name_html ." ". $id_html." /><label class='wpid-label' for='".$id."'>". $text ."</label>";
+        
+        return "<input data-slug='".$id."' value='".htmlentities( $text, ENT_QUOTES )."' type='checkbox' ".$class_html." ".$name_html ." ". $id_html." /><label class='wpid-label' for='".$id."'>". $text ."</label>";
 
     }
 

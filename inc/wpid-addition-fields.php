@@ -39,6 +39,65 @@
         ) );
 
 
+        $option_page->add_field(
+            array(
+            'id'=>'title_for_position_type',
+            'type'=>'title',
+            'name'=> "Position Types",
+            )
+        );
+
+        $group_field_id = $option_page->add_field( array(
+            'id'          => 'wpid_all_position_type',
+            'type'        => 'group',
+            // 'repeatable'  => false, // use false if you want non-repeatable group
+            'options'     => array(
+                'group_title'       => __( 'Position Type {#}', 'cmb2' ), // since version 1.1.4, {#} gets replaced by row number
+                'add_button'        => __( 'Add Another Position Type'  , 'cmb2' ),
+                'remove_button'     => __( 'Remove Position Type' , 'cmb2' ),
+                'sortable'          => true,
+                'closed'         => true, // true to have the groups closed by default
+                'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
+            ),
+        ) );
+
+        $option_page->add_group_field( $group_field_id, array(
+            "id"=>"wpid_position_type",
+            "type"=>"text_medium",
+            "name"=>"Position Type"
+        ));
+
+
+        $option_page->add_field(
+            array(
+            'id'=>'title_for_industry',
+            'type'=>'title',
+            'name'=> "Industry",
+            )
+        );
+
+        $group_field_id = $option_page->add_field( array(
+            'id'          => 'wpid_all_industry',
+            'type'        => 'group',
+            // 'repeatable'  => false, // use false if you want non-repeatable group
+            'options'     => array(
+                'group_title'       => __( 'Industry {#}', 'cmb2' ), // since version 1.1.4, {#} gets replaced by row number
+                'add_button'        => __( 'Add Another Industry'  , 'cmb2' ),
+                'remove_button'     => __( 'Remove Industry' , 'cmb2' ),
+                'sortable'          => true,
+                'closed'         => true, // true to have the groups closed by default
+                'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
+            ),
+        ) );
+
+        $option_page->add_group_field( $group_field_id, array(
+            "id"=>"wpid_industry",
+            "type"=>"text_medium",
+            "name"=>"Industry"
+        ));
+
+     
+
         $group_fields = array( "introductory_question", "transitional_and_verification_question", "technical_question","closing_question" );
 
         foreach( $group_fields as $field_name ){

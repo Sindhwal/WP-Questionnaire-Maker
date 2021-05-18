@@ -34,6 +34,7 @@
 
       $all_qa = "<div>";
       $current_tax = null;
+      $all_qa .= "<h2 class='section-title'>Core Competencies</h2>" ;
       if( $competencies_qa->have_posts() ){
             while( $competencies_qa->have_posts() ){
                $competencies_qa->the_post();

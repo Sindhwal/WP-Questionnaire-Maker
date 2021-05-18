@@ -26,6 +26,10 @@
         echo "<div id='wpid-questionnaire-container'>";
 
         echo "<div class='form-card active first-card'>";
+            echo $this->create_position_info();
+        echo "</div>";
+
+        echo "<div class='form-card'>";
             echo $this->create_section_panel( "Introductory Questions", "introductory_question", "wpid-intros" );
         echo "</div>";
 
@@ -57,6 +61,29 @@
         
         return ob_get_clean();
 
+    }
+
+
+    /**
+     * This will create a position info for the maker
+     */
+    function create_position_info(){
+
+        ob_start();
+        ?>
+        <div>
+        <h2 class=="section-title">Position Info</h2>
+        <p>This information is only collected once and will be able to be managed in your profile after you complete your first assessment</p>
+        <h3 class="section-ask">What Position Title are you hiring for?</h3>
+        <input type="text" id="">
+        <h3 class="section-ask">Position Type</h3>
+
+        <h3 class="section-ask">Industry</h3>
+
+        </div>
+        <?php
+
+        return ob_get_clean();
     }
 
     /**
@@ -98,7 +125,7 @@
         $no = 1;
         
         
-        echo "<div><h2>". $title . "</h2>";
+        echo "<div><h2 class='section-title'>". $title . "</h2>";
         
         echo "<ul class='wpid-main-container ". $option_name."_list'>";
         

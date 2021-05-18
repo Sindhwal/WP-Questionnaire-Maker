@@ -1,13 +1,35 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function ($) {
 
     window.wpid_competencies_selection = [];
     window.wpid_competencies_request = [];
 
-    if( $(".form-card.request-competencies").find("div ul").length > 0 ){
+    window.wpiq_selected_array = [];
+
+
+    $(document).on("click", ".submit-selected-qa", function (et) {
+        
+        et.preventDefault();
+
+        $("#wpid-questionnaire-container .form-card").each(
+            function (index, Obj) {
+                let title = $(Obj).find("div .section-title").text();
+                console.log("Title:" + $(Obj).find("div .section-title").text());
+                let selections = [];
+                $(Obj).find("div .wpid-main-container li input:checked").each(function (inde, oj) {
+                    selections.push($(oj).val());
+                    console.log("Selected: " + $(oj).val());
+                });
+                window.wpiq_selected_array[title] = selections;
+            }
+        );
+    });
+
+
+    if ($(".form-card.request-competencies").find("div ul").length == 0) {
         $(".form-card.request-competencies").html("<div class='empty'>Processing data</div>");
     }
 
-    $(".wpid-conitue-btn").on("click", function(et) {
+    $(".wpid-conitue-btn").on("click", function (et) {
 
         et.preventDefault();
 
@@ -21,7 +43,7 @@ jQuery(document).ready(function($) {
         Next.show();
 
         currentEl.animate({ opacity: 0 }, {
-            step: function(now) {
+            step: function (now) {
                 // for making fielset appear animation
                 opacity = 1 - now;
 
@@ -37,32 +59,35 @@ jQuery(document).ready(function($) {
         $(".wpid-back-btn").removeAttr("disabled");
 
         if (Next.hasClass("last-card")) {
-            $this.attr("disabled", "disabled");
+
+            $this.text("Submit");
+            $this.addClass("submit-selected-qa");
+
         }
-        if( Next.find("ul.wpid-main-container").hasClass("core_competencies_list") ){
-            if( Next.find("ul.wpid-main-container input:checked").length == 0 ){
+        if (Next.find("ul.wpid-main-container").hasClass("core_competencies_list")) {
+            if (Next.find("ul.wpid-main-container input:checked").length == 0) {
                 $this.attr("disabled", "disabled");
             }
-            
+
         }
 
-        if( $this.hasClass("request-competencies") ){
+        if ($this.hasClass("request-competencies")) {
 
-            if( window.wpid_competencies_selection != null && window.wpid_competencies_selection != window.wpid_competencies_request )
-            {
+            if (window.wpid_competencies_selection != null && window.wpid_competencies_selection != window.wpid_competencies_request) {
                 window.wpid_competencies_request = window.wpid_competencies_selection;
                 $.ajax({
-                "url":wpid_data.ajaxurl,
-                "type":"POST",
-                "dataType":"JSON",
-                "data":{"action":"wpid_request_competencies_qa","wp_nonce": wpid_data.wpid_nonce,"core_selections": window.wpid_competencies_request },
-                beforeSend:function(dt){
-                    $(".form-card.request-competencies").html("");
-                    console.log("Requesting data!");
-                }}).then(function( data ){
-                    if( data == null ){
+                    "url": wpid_data.ajaxurl,
+                    "type": "POST",
+                    "dataType": "JSON",
+                    "data": { "action": "wpid_request_competencies_qa", "wp_nonce": wpid_data.wpid_nonce, "core_selections": window.wpid_competencies_request },
+                    beforeSend: function (dt) {
+                        $(".form-card.request-competencies").html("");
+                        console.log("Requesting data!");
+                    }
+                }).then(function (data) {
+                    if (data == null) {
                         alert("Request failed!")
-                    }else{
+                    } else {
                         $this.removeClass("request-competencies");
                         $(".form-card.request-competencies").append(data.response);
                     }
@@ -74,23 +99,23 @@ jQuery(document).ready(function($) {
 
     });
 
-    $(document).on("change","ul.wpid-main-container.core_competencies_list input[type='checkbox']", function(et){
+    $(document).on("change", "ul.wpid-main-container.core_competencies_list input[type='checkbox']", function (et) {
 
         let $this = $(this);
 
-        if( $this.is(":checked") ){
-            window.wpid_competencies_selection.push( $this.attr("data-slug") );
-        }else{
-            let newArray = window.wpid_competencies_selection.filter( function(value,index,arr){
-                 if( value != $this.attr("data-slug") ){ return value; }
+        if ($this.is(":checked")) {
+            window.wpid_competencies_selection.push($this.attr("data-slug"));
+        } else {
+            let newArray = window.wpid_competencies_selection.filter(function (value, index, arr) {
+                if (value != $this.attr("data-slug")) { return value; }
             });
             window.wpid_competencies_selection = newArray;
         }
 
-        if( $("ul.wpid-main-container.core_competencies_list input:checked").length == 0 ){
-            $(".wpid-conitue-btn").attr("disabled","disbaled");
+        if ($("ul.wpid-main-container.core_competencies_list input:checked").length == 0) {
+            $(".wpid-conitue-btn").attr("disabled", "disbaled");
             $(".wpid-conitue-btn").removeClass("request-competencies");
-        }else{
+        } else {
             $(".wpid-conitue-btn").removeAttr("disabled");
             $(".wpid-conitue-btn").addClass("request-competencies");
 
@@ -98,7 +123,7 @@ jQuery(document).ready(function($) {
 
     });
 
-    $(".wpid-back-btn").on("click", function(et) {
+    $(".wpid-back-btn").on("click", function (et) {
 
         et.preventDefault();
 
@@ -111,7 +136,7 @@ jQuery(document).ready(function($) {
         Prev.show();
 
         currentEl.animate({ opacity: 0 }, {
-            step: function(now) {
+            step: function (now) {
                 // for making fielset appear animation
                 opacity = 1 - now;
 
@@ -130,16 +155,21 @@ jQuery(document).ready(function($) {
             $this.attr("disabled", "disabled");
         }
 
+        if ($(".wpid-conitue-btn").hasClass("submit-selected-qa")) {
+            $(".wpid-conitue-btn").removeClass("submit-selected-qa");
+            $(".wpid-conitue-btn").text("Continue");
+        }
+
         $(".wpid-conitue-btn").removeAttr("disabled");
 
-        if( Prev.find("ul.wpid-main-container").hasClass("core_competencies_list") ){
-            if( Prev.find("ul.wpid-main-container input:checked").length == 0 ){
+        if (Prev.find("ul.wpid-main-container").hasClass("core_competencies_list")) {
+            if (Prev.find("ul.wpid-main-container input:checked").length == 0) {
                 $this.attr("disabled", "disabled");
-            }else{
+            } else {
                 $(".wpid-conitue-btn").removeAttr("disabled");
                 $(".wpid-conitue-btn").addClass("request-competencies");
             }
-            
+
         }
 
 
