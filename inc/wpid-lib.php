@@ -59,14 +59,18 @@
      * 
      * Create single checkbox element
     */
-    public static function display_checkbox_options( $class, $text, $id ){
+    public static function display_checkbox_options( $class, $text, $id, $value = null ){
+
+        if( $value == null ){
+            $value = $text ;
+        }
 
         $id_html = ( isset($id) && !empty($id) ) ? "id='".$id."'" : "";
         $name_html = ( isset($id) && !empty($id) ) ? "name='".$id."'" : "";
 
         $class_html = ( isset($class) && !empty($class) ) ? "class='wpid-checkbox ".$class."'" : "";
         
-        return "<input data-slug='".$id."' value='".htmlentities( $text, ENT_QUOTES )."' type='checkbox' ".$class_html." ".$name_html ." ". $id_html." /><label class='wpid-label' for='".$id."'>". $text ."</label>";
+        return "<input data-slug='".$id."' value='".htmlentities( $text, ENT_QUOTES )."' type='checkbox' ".$class_html." ".$name_html ." ". $id_html." /><label class='wpid-label' for='".$id."'>". $value ."</label>";
 
     }
 

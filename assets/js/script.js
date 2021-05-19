@@ -3,7 +3,7 @@ jQuery(document).ready(function ($) {
     window.wpid_competencies_selection = [];
     window.wpid_competencies_request = [];
 
-    window.wpid_selected_array = new Map();
+    window.wpid_selected_array = {};
 
 
     $(document).on("click", ".submit-selected-qa", function (et) {
@@ -11,7 +11,7 @@ jQuery(document).ready(function ($) {
         
         et.preventDefault();
 
-        $("#wpid-questionnaire-container .form-card:not(.wpid-userinfo-section)").each(
+        $("#wpid-questionnaire-container .form-card:not(.wpid-ajax-ignore)").each(
             function (index, Obj) {
                 let title = $(Obj).find("div .section-title").text();
                 
@@ -19,11 +19,25 @@ jQuery(document).ready(function ($) {
                 $(Obj).find("div .wpid-main-container li input:checked").each(function (inde, oj) {
                     selections.push($(oj).val());
                 });
-                    window.wpid_selected_array.set( title, selections );
+                    window.wpid_selected_array[ title ] = selections ;
             }
         );
 
         $this.attr("disabled","disabled");
+
+        $.ajax({
+            "url":wpid_data.ajaxurl,
+            "type":"POST",
+            "dataType":"JSON",
+            "data": {"action":"wpid_generate_questionnaire_files","data":JSON.stringify( window.wpid_selected_array )},
+            "beforeSend":function( res ){
+                console.log("Form data is sent for uploading");
+            }
+        }).then(function( data ){
+            if( data.response == 200 ){
+                console.log( data.filename );
+            }
+        });
 
     });
 
@@ -41,15 +55,17 @@ jQuery(document).ready(function ($) {
         let Next = currentEl.next();
 
         if( currentEl.find(".wpid-info-section").length > 0 ){
-            console.log("That was a user info form");
+            
             let title = currentEl.find(".wpid-info-section #wpid-position-title").val();
             let position_type = currentEl.find(".wpid-info-section #wpid-position-type").val();
             let industry_name = currentEl.find(".wpid-info-section #wpid-industry-name").val();
             
             if( title == "" || position_type == "" || industry_name == "" ){
-                alert("This form can not be left blank!");
+                alert("This form can not be left blank. All fields are required!");
                 return;
             }
+
+
             $.ajax({
                 "url":wpid_data.ajaxurl,
                 "type":"POST",

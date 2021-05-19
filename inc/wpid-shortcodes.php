@@ -10,7 +10,6 @@
     public function __construct(){
 
         add_shortcode("wpid-questionnaire", array($this, "generate_main_shortcode"));
-
         add_action("wp_enqueue_scripts", array($this, "wp_enqueue_styles") );
 
     }
@@ -20,8 +19,13 @@
      * Main shortcode for the frontend layout
      */
     public function generate_main_shortcode( $atts, $content = null ){
-
+        
         $user_id = get_current_user_id();
+
+        if( $user_id == 0 ){
+            return "<strong><a href='". wp_login_url( site_url( $_SERVER['REQUEST_URI'] ) )."'>Login</a> to view this form.</strong>";
+        }
+
         $post_title = get_the_author_meta("wpid_position_title", $user_id );
         $post_type = get_the_author_meta("wpid_position_type", $user_id );
         $post_industry = get_the_author_meta("wpid_industry", $user_id );
@@ -38,7 +42,7 @@
 
 
         if( $post_title == null && $post_type == null && $post_industry == null ){
-            echo "<div class='form-card first-card active wpid-userinfo-section'>";
+            echo "<div class='form-card first-card active wpid-userinfo-section wpid-ajax-ignore'>";
                 echo $this->create_position_info();
             echo "</div>";
             
@@ -61,7 +65,7 @@
             echo $this->create_section_panel( "Technical Questions", "technical_question", "wpid-technicals" );
         echo "</div>";
 
-        echo "<div class='form-card'>";
+        echo "<div class='form-card wpid-ajax-ignore'>";
             echo $this->create_core_competencies( "Position Core Competencies" );
         echo "</div>";
 
