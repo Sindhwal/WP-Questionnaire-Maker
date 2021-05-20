@@ -8,7 +8,9 @@ jQuery(document).ready(function ($) {
 
     $(document).on("click", ".submit-selected-qa", function (et) {
         let $this = $(this);
-        
+        let filename = $this.attr('data-filename');
+        let fileurl = $this.attr('data-fileurl');
+
         et.preventDefault();
 
         $("#wpid-questionnaire-container .form-card:not(.wpid-ajax-ignore)").each(
@@ -24,19 +26,20 @@ jQuery(document).ready(function ($) {
         );
 
         $this.attr("disabled","disabled");
+        
+         $(".wpid-back-btn").hide();
 
         $.ajax({
             "url":wpid_data.ajaxurl,
             "type":"POST",
             "dataType":"JSON",
-            "data": {"action":"wpid_generate_questionnaire_files","data":JSON.stringify( window.wpid_selected_array )},
+            "data": {"action":"wpid_generate_questionnaire_files","data":JSON.stringify( window.wpid_selected_array ),"filename":filename},
             "beforeSend":function( res ){
-                console.log("Form data is sent for uploading");
+
             }
-        }).then(function( data ){
-            if( data.response == 200 ){
-                console.log( data.filename );
-            }
+        }).complete(function(data){
+            $("#wpid-questionnaire-controller").append("<a download class='btn btn-primary' href='"+fileurl+"'>DOWNLOAD PDF FILE</a>" );
+            $("#wpid-questionnaire-controller").append("<a download class='btn btn-primary' href='"+fileurl.replace(".pdf",".docx") +"'>DOWNLOAD DOCX FILE</a>" );
         });
 
     });
@@ -72,7 +75,7 @@ jQuery(document).ready(function ($) {
                 "dataType":"JSON",
                 "data":{ "action":"wpid_update_user_meta","wpid_position_title":title,"wpid_position_type":position_type,"wpid_industry":industry_name },
                 "beforeSend":function(d){
-                    console.log("userdata is posted!");
+                    
                 }
             }).then(function(data){
 
@@ -126,7 +129,7 @@ jQuery(document).ready(function ($) {
                     "data": { "action": "wpid_request_competencies_qa", "wp_nonce": wpid_data.wpid_nonce, "core_selections": window.wpid_competencies_request },
                     beforeSend: function (dt) {
                         $(".form-card.request-competencies").html("");
-                        console.log("Requesting data!");
+                        
                     }
                 }).then(function (data) {
                     if (data == null) {
@@ -218,7 +221,5 @@ jQuery(document).ready(function ($) {
 
 
     });
-
-    console.log("Script V: 1.0.0");
 
 })

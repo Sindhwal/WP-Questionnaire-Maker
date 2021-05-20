@@ -19,7 +19,7 @@
      * Main shortcode for the frontend layout
      */
     public function generate_main_shortcode( $atts, $content = null ){
-        
+    
         $user_id = get_current_user_id();
 
         if( $user_id == 0 ){
@@ -73,18 +73,27 @@
             /** KEEP THIS EMPTY | THIS DIV IS POPULATED BY DYNAMIC CONTENT ON FRONTEND **/
         echo "</div>";
 
-        echo "<div class='form-card last-card'>";
+        echo "<div class='form-card'>";
             echo $this->create_section_panel( "Closing Questions", "closing_question", "wpid-closing" );
         echo "</div>";
 
-        echo "<div class='form-card last-card'>";
+        echo "<div class='form-card last-card wpid-ajax-ignore'>";
             echo $this->create_final_section();
         echo "</div>";
 
         echo "<div id='wpid-questionnaire-controller'>";
-            echo "<button class='btn btn-primary wpid-back-btn' disabled='disabled'>Back</button>";
-            echo "<button class='btn btn-primary wpid-conitue-btn'>Continue</button>";
-            echo "<button style='display:none;' class='btn btn-primary submit-selected-qa'>Submit</button>";
+            echo "<button class='btn btn-primary wpid-back-btn' disabled='disabled'>BACK</button>";
+            echo "<button class='btn btn-primary wpid-conitue-btn'>CONTINUE</button>";
+            
+            $userdata = wp_get_current_user();
+            $username = $userdata->user_login;
+            $upload_dir = wp_upload_dir(); 
+            $upload_url = $upload_dir['url'];
+            $file_name = $username . '-' . time() . '.pdf';
+            $fileURL = $upload_url .'/' . $file_name ;
+
+            echo "<button style='display:none;' class='btn btn-primary submit-selected-qa' data-filename='". $file_name ."' data-fileurl='".$fileURL."'>Save & Finish</button>";
+
         echo "</div>";  // end of button container
       
         echo "</div>";
@@ -98,7 +107,23 @@
      * This function creates the final confirmation section for the form
      */
     function create_final_section(){
+        ?>
+        <div><h2 class='section-title'>Would you be willing to share your interview Dive in our Community Library?</h2>        
+            <ul class='wpid-main-container'>
+                    <li>
+                        <input data-slug="wpid-public-drive" value="Yes! I'd be happy to share it in the Interview Drive Public Library" type="radio" class="wpid-checkbox wpid-public-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-public-ask" />
+                        <label class="wpid-label" for="wpid-public-ask">Yes! I'd be happy to share it in the Interview Drive Public Library</label>
+                <!-- echo wpid_lib::display_checkbox_options("wpid-public-drive","","wpid-drive-ask","wpid-public-drive" ); -->
+                    </li>
 
+                    <li>
+                        <input data-slug="wpid-private-drive" value="No. This should just be available in my personal Drive Library." type="radio" class="wpid-checkbox wpid-private-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-private-ask" />
+                        <label class="wpid-label" for="wpid-private-ask">No. This should just be available in my personal Drive Library</label>
+                <!-- echo wpid_lib::display_checkbox_options("wpid-private-drive","No. This should just be available in my personal Drive Library","wpid-drive-ask","wpid-prive-drive" ); -->
+                    </li>
+                </ul>
+            </div>
+        <?php
     }
 
     /**

@@ -24,6 +24,9 @@ class wpid_ajax
     {
 
         $data = isset($_POST['data']) && !empty($_POST['data']) ? $_POST['data'] : null;
+        $file_name = isset($_POST['filename']) && !empty($_POST['filename']) ? $_POST['filename'] : null;
+        
+        $post_content = "";
 
         if ($data == null) {
             die(json_encode(array("response" => 400, "message" => "No data has been received to process")));
@@ -32,13 +35,16 @@ class wpid_ajax
         require WPID_DIR . "/inc/fpdf.php";
 
 
-        $pdf = new FPDF();
+        $pdf = new FPDF();  // initialize PDF
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();    //initialize word
+        \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
+        $section = $phpWord->addSection(); // add section for Word
 
         $data = json_decode( stripslashes( $data ) );
 
         foreach( $data as $title=>$content ){
 
-         if( empty( $title ) ){
+         if( empty( $title ) || empty( $content ) || count( $content ) < 1 ){
             continue;
          }
          
@@ -47,6 +53,10 @@ class wpid_ajax
             $pdf->Cell(0,10,'',0,1);
             $pdf->SetFont('Arial','B',18);
             $pdf->Write( 8, $title );
+
+            $section->addText(  $title , array("name"=>"Arial","size"=>"18"), array('space' => array('after' => 200) ) );
+
+            $post_content .= "<h2>" . $title . "<h2>";
 
             $ex_title = null;
             $ex_cat = null;
@@ -63,37 +73,47 @@ class wpid_ajax
                   }
                   
                   if( $ex_cat != $cat_title ){
-                     $pdf->Cell(0,20,'',0,1);
+                     $pdf->Cell(0,20,'',0,1);   $post_content .= "<br/>";
                      $pdf->SetFont('Arial','B',16);
-                     $pdf->Write( 8, $cat_title );
+                     $pdf->Write( 8, $cat_title );  $post_content .= "<h4>" . $cat_title . "</h4>" ;
+                     $section->addText(  $cat_title , array("name"=>"Arial","size"=>"16") );
+                     
                      $ex_cat = $cat_title;
                   }
-                  $pdf->Cell(0,10,'',0,1);
+                  $pdf->Cell(0,10,'',0,1);  $post_content .= "<br/>";
                   $pdf->SetFont('Arial','B',14);
-                  $pdf->Write( 8, $qa_title );
+                  $pdf->Write( 8, $qa_title );  $post_content .= "<h5>". $qa_title ."</h5>";
+                  $section->addText(  $qa_title , array("name"=>"Arial","size"=>"14"), array('space' => array('after' => 1200) ) );
                   $pdf->Cell(0,10,'',0,1);
                   $pdf->Cell(0,40,'',1,1);
 
                }else{
-                  $pdf->Cell(0,20,'',0,1);
+                  $pdf->Cell(0,20,'',0,1);          $post_content .= "<br/>";
                   $pdf->SetFont('Arial','B',14);
-                  $pdf->Write( 8, $single_row );
-                  $pdf->Cell(0,10,'',0,1);
-                  $pdf->Cell(0,40,'',1,1);
+                  $pdf->Write( 8, $single_row );    $post_content .= "<h5>". $single_row . "</h5>";
+                  $section->addText(  $single_row , array("name"=>"Arial","size"=>"14"), array('space' => array('after' => 1200) ) );
+                  $pdf->Cell(0,10,'',0,1);          $post_content .= "<br/>";
+                  $pdf->Cell(0,40,'',1,1);          $post_content .= "<br/><br/><br/><br/>";
                }
             }
         
-
+            $section->addPageBreak();
         }
 
         $userdata = wp_get_current_user();
         $username = $userdata->user_login;
-        $upload_dir = wp_upload_dir(); 
-        $upload_url = $upload_dir['url'];
-        $file_name = $username . '-' . time() . '.pdf';
-        $pdf->Output("F", $upload_dir['path'] . "/" . $file_name );die();
+        wp_insert_post( array(
+                'post_status'=>'publish',
+                'post_type'=>'wpid_submissions',
+                'post_content'=>$post_content,
+                'post_title'=> 'Interview Questionnaire By: '. $username  ) );
 
-        die( json_encode( array("response"=>200, 'filename'=>$upload_url . '/'. $file_name )) );
+        $upload_dir = wp_upload_dir(); 
+        
+        $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
+        $objWriter->save( $upload_dir['path'] . "/" . str_replace(".pdf",".docx", $file_name ) );
+
+        $pdf->Output("F", $upload_dir['path'] . "/" . $file_name );die();
 
         //$pdf->AddPage();
         //$pdf->SetFont('Arial','B',16);

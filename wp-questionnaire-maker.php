@@ -88,6 +88,7 @@
 
     public function include_required_files(){
 
+        require WPID_DIR . "/inc/vendor/autoload.php";
         require WPID_DIR . "/inc/cmb2/init.php";
         require WPID_DIR . "/inc/wpid-generate-cpt.php";
         require WPID_DIR . "/inc/wpid-addition-fields.php";
