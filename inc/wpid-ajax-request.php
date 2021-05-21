@@ -18,7 +18,45 @@ class wpid_ajax
 
         add_action("wp_ajax_wpid_send_email", array($this, "wpid_send_email"));
 
+        add_action("wp_ajax_wpid_display_created_form", array($this, "wpid_display_created_form"));
+
         add_action("wp_ajax_wpid_generate_questionnaire_files", array($this, "wpid_generate_questionnaire_files"));
+
+    }
+
+        /**
+     * 
+     * Display final form on frontend
+     */
+    function wpid_display_created_form(){
+
+        $args = array(
+            'post_type' => 'wpid_submissions',
+            'posts_per_page' => 1,
+            'author'=>get_current_user_id(),
+            'post_status'=>'publish',
+            'order'=>'DESC',
+            'orderby'=>'date'
+        );
+
+        $r_post = new WP_Query( $args );
+
+        $content = null;
+        $this_id = null;
+        while( $r_post->have_posts() ){
+            $r_post->the_post();
+            $content = get_the_content();
+            $this_id = get_the_ID();
+        }
+
+        $output = "<div class='wpid-content' data-post-id='".$this_id."'>";
+        $output .= $content;
+        $output .= "</div>";
+
+        wp_reset_postdata();
+        
+        echo $output;
+        die();
 
     }
 
@@ -117,15 +155,15 @@ class wpid_ajax
                   $section->addText(  $qa_title , array("name"=>"Arial","size"=>"14"), array('space' => array('after' => 1200) ) );
                   $pdf->Cell(0,10,'',0,1);  
                   $pdf->Cell(0,40,'',1,1);
-                  $post_content .= "<br/><br/><br/><br/>";
+                  $post_content .= "<span class='wpid-response'><br/><br/><br/><br/></span>";
 
                }else{
                   $pdf->Cell(0,20,'',0,1);          $post_content .= "<br/>";
                   $pdf->SetFont('Arial','B',14);
                   $pdf->Write( 8, $single_row );    $post_content .= "<h5>". $single_row . "</h5>";
                   $section->addText(  $single_row , array("name"=>"Arial","size"=>"14"), array('space' => array('after' => 1200) ) );
-                  $pdf->Cell(0,10,'',0,1);          $post_content .= "<br/>";
-                  $pdf->Cell(0,40,'',1,1);          $post_content .= "<br/><br/><br/><br/>";
+                  $pdf->Cell(0,10,'',0,1);          $post_content .= "<span class='wpid-response'><br/>";
+                  $pdf->Cell(0,40,'',1,1);          $post_content .= "<br/><br/><br/><br/></span>";
                }
             }
         
@@ -142,6 +180,7 @@ class wpid_ajax
 
         $upload_dir = wp_upload_dir(); 
         
+        wp_reset_postdata();
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
         $objWriter->save( $upload_dir['path'] . "/" . str_replace(".pdf",".docx", $file_name ) );
 

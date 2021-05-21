@@ -68,13 +68,26 @@ jQuery(document).ready(function ($) {
             "dataType":"JSON",
             "data": {"action":"wpid_generate_questionnaire_files","data":JSON.stringify( window.wpid_selected_array ),"filename":filename},
             "beforeSend":function( res ){
-
             }
         }).complete(function(data){
 
             let emailBody = encodeURIComponent( $(".wpid-display-form .wpid-content").html() );
             $(".form-card.last-card").hide();
             $(".wpid-display-form").show();
+
+            $.ajax({
+                "url":wpid_data.ajaxurl,
+                "type":"POST",
+                "dataType":"HTML",
+                "data": {"action":"wpid_display_created_form"},
+                "beforeSend":function(d){
+                    $(".wpid-display-form").append("<div class='temp-output'>Generating output</div>");
+                }
+            }).then(function(data){
+                $(".wpid-display-form .temp-output").remove();
+                $(".wpid-display-form #wpid-controller-container").after(data);
+            });
+
             $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-print-dive'>PRINT DIVE</a>" );
             $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='"+fileurl+"'>SAVE AS PDF</a>" );
             $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='"+fileurl.replace(".pdf",".docx") +"'>SAVE AS DOCX</a>" );
