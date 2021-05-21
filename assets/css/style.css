@@ -122,10 +122,17 @@ div#wpid-questionnaire-controller {
 }
 
 div#wpid-questionnaire-controller button,
-div#wpid-questionnaire-controller .btn{
+div#wpid-questionnaire-controller .btn,
+div#wpid-controller-container .btn {
     margin: 10px;
 }
-
+.wpid-display-form h2.section-title, .wpid-display-form h4.section-subtitle {
+    text-align: center;
+}
+div#wpid-controller-container {
+    margin: 0 auto;
+    text-align: center;
+}
 div#wpid-questionnaire-controller .wpid-conitue-btn {
     float: right;
 }

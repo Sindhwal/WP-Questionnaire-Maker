@@ -5,6 +5,39 @@ jQuery(document).ready(function ($) {
 
     window.wpid_selected_array = {};
 
+    $(document).on('click','#wpid-print-dive',function(et){
+        et.preventDefault();
+        doc = window.open();
+        doc.document.write( $(".wpid-display-form .wpid-content").html() );
+        doc.print();
+        doc.close();
+    });
+
+    $(document).on('click', '#wpid-email-dive', function( et ){
+        et.preventDefault();
+        let $this = $(this);
+        let id = $('.wpid-display-form .wpid-content').attr('data-post-id');
+
+        $.ajax({
+            "url":wpid_data.ajaxurl,
+            "type":"POST",
+            "dataType":"JSON",
+            "data":{"action":"wpid_send_email","post_id":id},
+            "beforeSend":function(){
+                $this.text("Sending...");
+            }
+        }).then(function(d){
+            console.log("Mail is sent!");
+            if( d.response == 200 ){
+                alert("Check your registered email for the Questionnaire dive.");
+                $this.text("Sent!");
+                $this.attr("disabled","disabled");
+            }else{
+                alert("Something went wrong while sending an email.");
+            }
+
+        })
+    });
 
     $(document).on("click", ".submit-selected-qa", function (et) {
         let $this = $(this);
@@ -38,8 +71,15 @@ jQuery(document).ready(function ($) {
 
             }
         }).complete(function(data){
-            $("#wpid-questionnaire-controller").append("<a download class='btn btn-primary' href='"+fileurl+"'>DOWNLOAD PDF FILE</a>" );
-            $("#wpid-questionnaire-controller").append("<a download class='btn btn-primary' href='"+fileurl.replace(".pdf",".docx") +"'>DOWNLOAD DOCX FILE</a>" );
+
+            let emailBody = encodeURIComponent( $(".wpid-display-form .wpid-content").html() );
+            $(".form-card.last-card").hide();
+            $(".wpid-display-form").show();
+            $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-print-dive'>PRINT DIVE</a>" );
+            $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='"+fileurl+"'>SAVE AS PDF</a>" );
+            $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='"+fileurl.replace(".pdf",".docx") +"'>SAVE AS DOCX</a>" );
+            $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-email-dive'>EMAIL DIVE</a>" );
+
         });
 
     });

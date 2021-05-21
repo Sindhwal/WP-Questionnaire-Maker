@@ -70,15 +70,25 @@
         echo "</div>";
 
         echo "<div class='form-card request-competencies'>";
-            /** KEEP THIS EMPTY | THIS DIV IS POPULATED BY DYNAMIC CONTENT ON FRONTEND **/
+            /** KEEP THIS EMPTY | THIS DIV IS POPULATED BY DYNAMIC CONTENT ON FRONTEND USING JAVASCRIPT **/
         echo "</div>";
 
         echo "<div class='form-card'>";
             echo $this->create_section_panel( "Closing Questions", "closing_question", "wpid-closing" );
         echo "</div>";
 
-        echo "<div class='form-card last-card wpid-ajax-ignore'>";
+        echo "<div class='form-card wpid-ajax-ignore last-card'>";
             echo $this->create_final_section();
+        echo "</div>";
+
+        echo "<div class='form-card wpid-ajax-ignore wpid-display-form'>";
+            echo "<div><h2 class='section-title'>Congratulations! You've completed Your Questionnaire</h2>";
+                echo "<h4 class='section-subtitle'>How Would You Like To View Your Dive</h4>";
+                echo "<div id='wpid-controller-container'></div>";
+
+                echo    $this->display_created_form();
+
+            echo "</div>";
         echo "</div>";
 
         echo "<div id='wpid-questionnaire-controller'>";
@@ -102,6 +112,38 @@
 
     }
 
+    /**
+     * 
+     * Display final form on frontend
+     */
+    function display_created_form(){
+
+        $args = array(
+            'post_type' => 'wpid_submissions',
+            'posts_per_page' => 1,
+            'author'=>get_current_user_id(),
+            'post_status'=>'publish',
+            'order'=>'DESC',
+            'orderby'=>'date'
+        );
+
+        $r_post = new WP_Query( $args );
+
+        $content = null;
+        $this_id = null;
+        while( $r_post->have_posts() ){
+            $r_post->the_post();
+            $content = get_the_content();
+            $this_id = get_the_ID();
+        }
+
+        $output = "<div class='wpid-content' data-post-id='".$this_id."'>";
+        $output .= $content;
+        $output .= "</div>";
+
+        return $output;
+
+    }
 
     /**
      * This function creates the final confirmation section for the form

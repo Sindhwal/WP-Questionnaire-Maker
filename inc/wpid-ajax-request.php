@@ -16,7 +16,38 @@ class wpid_ajax
 
         add_action("wp_ajax_wpid_update_user_meta", array($this, "wpid_update_user_meta"));
 
+        add_action("wp_ajax_wpid_send_email", array($this, "wpid_send_email"));
+
         add_action("wp_ajax_wpid_generate_questionnaire_files", array($this, "wpid_generate_questionnaire_files"));
+
+    }
+
+    public function wpid_send_email(){
+
+        $postID = ( isset($_POST['post_id']) && !empty($_POST['post_id']) ) ? $_POST['post_id'] : null ;
+
+        if( $postID == null ){
+            die( json_encode( array( "response"=>500,"message"=>"Unable to read the created form." ) ) );
+        }
+
+        $userdata = wp_get_current_user();
+
+        $to = $userdata->user_email ;
+
+        $subject = 'Questionnaire Drive';
+
+        $headers = "From: ". get_option('admin_email', false) ;
+        $headers .= "Reply-To: ". get_option('admin_email', false) ;
+        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+
+        $query = get_post( $postID );
+        $message = apply_filters('the_content', $query->post_content);
+
+        $response = mail($to, $subject, $message, $headers);
+
+        die( json_encode( array( "response"=>200, "message"=>$response )));
+
 
     }
 
@@ -72,20 +103,21 @@ class wpid_ajax
                      break;
                   }
                   
+                  $pdf->Cell(0,10,'',0,1); 
                   if( $ex_cat != $cat_title ){
-                     $pdf->Cell(0,20,'',0,1);   $post_content .= "<br/>";
+                     $pdf->Cell(0,10,'',0,1);   $post_content .= "<br/>";
                      $pdf->SetFont('Arial','B',16);
                      $pdf->Write( 8, $cat_title );  $post_content .= "<h4>" . $cat_title . "</h4>" ;
                      $section->addText(  $cat_title , array("name"=>"Arial","size"=>"16") );
                      
                      $ex_cat = $cat_title;
                   }
-                  $pdf->Cell(0,10,'',0,1);  $post_content .= "<br/>";
                   $pdf->SetFont('Arial','B',14);
                   $pdf->Write( 8, $qa_title );  $post_content .= "<h5>". $qa_title ."</h5>";
                   $section->addText(  $qa_title , array("name"=>"Arial","size"=>"14"), array('space' => array('after' => 1200) ) );
-                  $pdf->Cell(0,10,'',0,1);
+                  $pdf->Cell(0,10,'',0,1);  
                   $pdf->Cell(0,40,'',1,1);
+                  $post_content .= "<br/><br/><br/><br/>";
 
                }else{
                   $pdf->Cell(0,20,'',0,1);          $post_content .= "<br/>";
