@@ -118,15 +118,13 @@
         <div><h2 class='section-title'>Would you be willing to share your interview Dive in our Community Library?</h2>        
             <ul class='wpid-main-container'>
                     <li>
-                        <input data-slug="wpid-public-drive" value="Yes! I'd be happy to share it in the Interview Drive Public Library" type="radio" class="wpid-checkbox wpid-public-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-public-ask" />
+                        <input data-slug="wpid-public-drive" value="public" type="radio" class="wpid-checkbox wpid-public-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-public-ask" selected/>
                         <label class="wpid-label" for="wpid-public-ask">Yes! I'd be happy to share it in the Interview Drive Public Library</label>
-                <!-- echo wpid_lib::display_checkbox_options("wpid-public-drive","","wpid-drive-ask","wpid-public-drive" ); -->
                     </li>
 
                     <li>
-                        <input data-slug="wpid-private-drive" value="No. This should just be available in my personal Drive Library." type="radio" class="wpid-checkbox wpid-private-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-private-ask" />
+                        <input data-slug="wpid-private-drive" value="private" type="radio" class="wpid-checkbox wpid-private-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-private-ask" />
                         <label class="wpid-label" for="wpid-private-ask">No. This should just be available in my personal Drive Library</label>
-                <!-- echo wpid_lib::display_checkbox_options("wpid-private-drive","No. This should just be available in my personal Drive Library","wpid-drive-ask","wpid-prive-drive" ); -->
                     </li>
                 </ul>
             </div>

@@ -58,6 +58,8 @@ jQuery(document).ready(function ($) {
             }
         );
 
+        let dive_type = $("input[name='wpid-drive-ask']:checked").val();
+
         $this.attr("disabled","disabled");
         
          $(".wpid-back-btn").hide();
@@ -66,7 +68,7 @@ jQuery(document).ready(function ($) {
             "url":wpid_data.ajaxurl,
             "type":"POST",
             "dataType":"JSON",
-            "data": {"action":"wpid_generate_questionnaire_files","data":JSON.stringify( window.wpid_selected_array ),"filename":filename},
+            "data": { "action" : "wpid_generate_questionnaire_files","data" : JSON.stringify( window.wpid_selected_array ),"filename" : filename,"dive_type" : dive_type },
             "beforeSend":function( res ){
             }
         }).complete(function(data){

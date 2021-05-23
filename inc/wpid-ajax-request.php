@@ -94,6 +94,7 @@ class wpid_ajax
 
         $data = isset($_POST['data']) && !empty($_POST['data']) ? $_POST['data'] : null;
         $file_name = isset($_POST['filename']) && !empty($_POST['filename']) ? $_POST['filename'] : null;
+        $dive_type = isset($_POST['dive_type']) && !empty($_POST['dive_type']) ? $_POST['dive_type'] : 'public';
         
         $post_content = "";
 
@@ -171,12 +172,17 @@ class wpid_ajax
         }
 
         $userdata = wp_get_current_user();
+
+        $industry = get_user_meta( $userdata->ID , 'wpid_industry' , true );
+        $position = get_user_meta( $userdata->ID , 'wpid_position_title' , true );
+        
         $username = $userdata->user_login;
+
         wp_insert_post( array(
                 'post_status'=>'publish',
                 'post_type'=>'wpid_submissions',
                 'post_content'=>$post_content,
-                'post_title'=> 'Interview Questionnaire By: '. $username  ) );
+                'post_title'=> $industry .' - '. $position .' - '.  $username  ) );
 
         $upload_dir = wp_upload_dir(); 
         
