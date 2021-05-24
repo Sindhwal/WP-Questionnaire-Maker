@@ -10,6 +10,8 @@
     public function __construct(){
 
         add_shortcode("wpid-questionnaire", array($this, "generate_main_shortcode"));
+        add_shortcode( "wpid-interview-dive", array($this, "display_interview_dive") );
+
         add_action("wp_enqueue_scripts", array($this, "wp_enqueue_styles") );
 
     }
@@ -39,7 +41,6 @@
         ob_start();
 
         echo "<div id='wpid-questionnaire-container'>";
-
 
         if( $post_title == null && $post_type == null && $post_industry == null ){
             echo "<div class='form-card first-card active wpid-userinfo-section wpid-ajax-ignore'>";
@@ -106,6 +107,57 @@
         echo "</div>";
         
         return ob_get_clean();
+
+    }
+
+
+
+    function display_interview_dive( $atts, $content = null ){
+
+        $atts = shortcode_atts( array(
+            'type'=>'personal',
+            'max'=>'10',
+        ), $atts );
+
+        $content ="";
+        $type = ( isset($atts['type']) && !empty($atts['type'])) ? $atts['type'] : 'personal' ;
+        $max = ( isset($atts['max']) && !empty($atts['max'])) ? $atts['max'] : '10' ;
+
+        $args = array();
+
+        if( $type == "personal" ){
+            $args = array(
+                "post_type"=>"wpid_submissions",
+                "post_per_page"=>$max,
+                "meta_query"=>array(
+                    array(
+                        'key'=>'wpid_submissions_type',
+                        'value'=>'public',
+                        'compare'=>'='
+                    )
+                )
+            );
+
+        }
+
+        $posts = new WP_Query( $args );
+
+        if( $posts->have_posts() ){
+
+            while( $posts->have_posts() ){
+                $posts->the_post();
+                $title = get_the_title( );
+                $id = get_the_ID();
+                $content .= "<div class='single-post-title'>" ;
+                $content .= "<a href='". get_permalink( $id ) ."'><h3>". get_the_title( $id ) . "</h3></a>";
+                $content .= "</div>";
+            }
+
+        }
+
+
+        wp_reset_postdata();
+        return $content;
 
     }
 

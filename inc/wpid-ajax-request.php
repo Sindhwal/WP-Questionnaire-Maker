@@ -75,8 +75,8 @@ class wpid_ajax
         $subject = 'Questionnaire Drive';
 
         $headers = "From: ". get_option('admin_email', false) ;
-        $headers .= "Reply-To: ". get_option('admin_email', false) ;
-        $headers .= "MIME-Version: 1.0\r\n";
+        $headers .= "\r\nReply-To: ". get_option('admin_email', false) ;
+        $headers .= "\r\nMIME-Version: 1.0\r\n";
         $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 
         $query = get_post( $postID );
@@ -102,6 +102,14 @@ class wpid_ajax
             die(json_encode(array("response" => 400, "message" => "No data has been received to process")));
         }
 
+        $userdata = wp_get_current_user();
+
+        $industry = get_user_meta( $userdata->ID , 'wpid_industry' , true );
+        $position = get_user_meta( $userdata->ID , 'wpid_position_title' , true );
+        
+        $username = $userdata->user_login;
+
+
         require WPID_DIR . "/inc/fpdf.php";
 
 
@@ -112,6 +120,8 @@ class wpid_ajax
 
         $data = json_decode( stripslashes( $data ) );
 
+        $position_name = null;
+
         foreach( $data as $title=>$content ){
 
          if( empty( $title ) || empty( $content ) || count( $content ) < 1 ){
@@ -120,13 +130,46 @@ class wpid_ajax
          
          $pdf->AddPage();
 
+
+
+         if( $post_content == "" ){
+             
+            $all_titles = array("interviewer", "candidate_name", "interview_date");
+
+            $pdf->Cell(0,10,'',0,1);
+            $pdf->SetFont('Arial','B',18);
+            $pdf->Write( 8, "Position Name: " . $position );
+            $section->addText( "Position Name: " . $position , array("name"=>"Arial","size"=>"18") );
+            $post_content .= "<h4>Position Name: ". $position . "</h4>";
+
+
+            foreach( $all_titles as $fix_title ){
+    
+                $fix_title = ucwords( str_replace("_"," ",  $fix_title ) );
+    
+                $pos_title = "<h6>" . $fix_title . "</h6>";
+                $pdf->Cell(0,10,'',0,1);
+                $pdf->SetFont('Arial','B',14);
+                $pdf->Write( 8, $fix_title );
+                $pdf->Cell(0,10,'',0,1);  
+                $pdf->Cell(0,10,'',1,1);
+                $post_content .= $pos_title;
+                
+                $section->addText(  $fix_title , array("name"=>"Arial","size"=>"18"), array('space' => array('after' => 50) ) );
+    
+                $post_content .= "<span class='wpid-single-response'><br/><br/></span>";
+                
+            }
+
+        }
+
             $pdf->Cell(0,10,'',0,1);
             $pdf->SetFont('Arial','B',18);
             $pdf->Write( 8, $title );
 
             $section->addText(  $title , array("name"=>"Arial","size"=>"18"), array('space' => array('after' => 200) ) );
 
-            $post_content .= "<h2>" . $title . "<h2>";
+            $post_content .= "<h2>" . $title . "</h2>";
 
             $ex_title = null;
             $ex_cat = null;
@@ -171,29 +214,27 @@ class wpid_ajax
             $section->addPageBreak();
         }
 
-        $userdata = wp_get_current_user();
+        $post_id = wp_insert_post( array(
+                            'post_status'=>'publish',
+                            'post_type'=>'wpid_submissions',
+                            'post_content'=>$post_content,
+                            'post_title'=> $industry .' - '. $position .' - '.  $username  )
+                    );
 
-        $industry = get_user_meta( $userdata->ID , 'wpid_industry' , true );
-        $position = get_user_meta( $userdata->ID , 'wpid_position_title' , true );
-        
-        $username = $userdata->user_login;
-
-        wp_insert_post( array(
-                'post_status'=>'publish',
-                'post_type'=>'wpid_submissions',
-                'post_content'=>$post_content,
-                'post_title'=> $industry .' - '. $position .' - '.  $username  ) );
+        update_post_meta( $post_id, "wpid_submissions_type" , $dive_type );
 
         $upload_dir = wp_upload_dir(); 
         
         wp_reset_postdata();
         $objWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $objWriter->save( $upload_dir['path'] . "/" . str_replace(".pdf",".docx", $file_name ) );
-
-        $pdf->Output("F", $upload_dir['path'] . "/" . $file_name );die();
-
-        //$pdf->AddPage();
-        //$pdf->SetFont('Arial','B',16);
+        $doc_file =  str_replace(".pdf",".docx", $file_name ) ;
+        $pdf_file =  $file_name ;       
+        
+        update_post_meta( $post_id, "wpid_submissions_pdf_file", $upload_dir['url'] .'/'. $pdf_file );
+        update_post_meta( $post_id, "wpid_submissions_doc_file", $upload_dir['url'] .'/'. $doc_file );
+        
+        $objWriter->save( $upload_dir['path'] . "/" . $doc_file );
+        $pdf->Output("F", $upload_dir['path'] . "/" . $pdf_file );die();
 
 
 

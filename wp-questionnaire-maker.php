@@ -33,8 +33,23 @@
         add_action( 'personal_options_update', array($this, 'crf_update_profile_fields') );
         add_action( 'edit_user_profile_update', array($this, 'crf_update_profile_fields') );
 
+        add_filter( 'template_include', array( $this, 'wpid_submissions_template' ) );
+
     }
 
+
+    function wpid_submissions_template( $template ){
+
+        $post_type = array( 'wpid_submissions' );
+
+        if ( is_singular( $post_type ) && file_exists( WPID_DIR . 'templates/single-wpid-submissions.php' ) ){
+            $template = WPID_DIR . 'templates/single-wpid-submissions.php' ;
+        }
+    
+
+        return $template;
+
+    }
 
     /**
      * Update user fields for position information

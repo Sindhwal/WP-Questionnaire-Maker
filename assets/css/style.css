@@ -149,4 +149,10 @@ div#wpid-questionnaire-controller .wpid-conitue-btn {
 span.wpid-response {
     border: 1px solid black;
     display: block;
+    min-height: 100px;
+}
+span.wpid-single-response {
+    border: 1px solid black;
+    display: block;
+    min-height: 30px;
 }

@@ -169,7 +169,7 @@
                 'supports' => $support,
                 //'taxonomies' => array("core-competencies"),
                 'hierarchical' => true,
-                'public' => true, // it's not public, it shouldn't have it's own permalink, and so on
+                'public' => true,
                 'show_ui' => true,
                 'menu_position' => 5,
                 'show_in_admin_bar' => false,
