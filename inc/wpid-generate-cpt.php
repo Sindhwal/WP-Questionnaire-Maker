@@ -15,7 +15,33 @@
         add_action("init", array( $this, "generate_cpt_taxonomy"),100);
         add_action("init", array( $this, "register_form_submission_cpt"));
 
+        add_filter( "manage_wpid_submissions_posts_columns" , array($this, "wpid_submissions_posts_columns" ) );
+        add_action( "manage_wpid_submissions_posts_custom_column", array($this, "wpid_submissions_posts_custom_column" ),100,2 );
+
     }
+
+    public function wpid_submissions_posts_custom_column( $column, $postID ){
+
+        switch( $column ){
+            case 'type':
+                $type = ucwords( get_post_meta( $postID, "wpid_submissions_type" , true ) );
+                $type = ( isset( $type ) && !empty( $type ) ) ? $type : 'N/A' ;
+                echo $type ;
+            break;
+        }
+
+    }
+
+    public function wpid_submissions_posts_columns( $columns ){
+
+        $date = $columns['date'] ;
+        unset( $columns['date'] ) ;
+        $columns['type'] = "Type" ;
+        $columns['date'] = $date ;
+
+        return $columns;
+    }
+
 
     public function register_questions_cpt(){
 

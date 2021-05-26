@@ -156,3 +156,45 @@ span.wpid-single-response {
     display: block;
     min-height: 30px;
 }
+
+.pagination__wrapper {
+    height: 50px;
+    padding-top: 20px;
+    margin-bottom: 25px;
+    position: relative;
+    text-align: center;
+    width: 100%;
+    border-top: 1px solid #ededed;
+}
+.pagination {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.pagination li {
+    display: block;
+    float: left;
+    padding: 5px;
+}
+.pagination li:first-child {
+    border: none;
+}
+.pagination a, .pagination span {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    box-sizing: border-box;
+    color: rgba(0,0,0,0.6);
+    display: block;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    min-width: 40px;
+    padding: 0;
+}
+.pagination a.current, .pagination span.current {
+    background: rgba(0,0,0,0.1);
+    color: #000;
+    cursor: default;
+}
