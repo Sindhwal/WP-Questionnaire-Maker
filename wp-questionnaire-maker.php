@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WP Questionnaire Maker
  * Description: WP Questionnaire Maker allows user to create a questionnaire form through multi selection form flow.
- * Version: 1.0
+ * Version: 1.2
  * Author: Pawan Sindhwal
  * License: GNU 2.0+
  * 
