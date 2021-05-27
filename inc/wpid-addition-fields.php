@@ -57,77 +57,8 @@
              */
     
             'option_key'      => 'wpid_general', // The option key and admin menu page slug.
-            // 'icon_url'        => 'dashicons-palmtree', // Menu icon. Only applicable if 'parent_slug' is left empty.
-            // 'menu_title'      => esc_html__( 'Options', 'myprefix' ), // Falls back to 'title' (above).
-             'parent_slug'     => 'edit.php?post_type=wpid_questions', // Make options page a submenu item of the themes menu.
-            // 'capability'      => 'manage_options', // Cap required to view options-page.
-            // 'position'        => 1, // Menu position. Only applicable if 'parent_slug' is left empty.
-            // 'admin_menu_hook' => 'network_admin_menu', // 'network_admin_menu' to add network-level options page.
-            // 'display_cb'      => false, // Override the options-page form output (CMB2_Hookup::options_page_output()).
-            // 'save_button'     => esc_html__( 'Save Theme Options', 'myprefix' ), // The text for the options-page save button. Defaults to 'Save'.
+            'parent_slug'     => 'edit.php?post_type=wpid_questions', 
         ) );
-
-/* 
-        $option_page->add_field(
-            array(
-            'id'=>'title_for_position_type',
-            'type'=>'title',
-            'name'=> "Position Types",
-            )
-        );
-
-        $group_field_id = $option_page->add_field( array(
-            'id'          => 'wpid_all_position_type',
-            'type'        => 'group',
-            // 'repeatable'  => false, // use false if you want non-repeatable group
-            'options'     => array(
-                'group_title'       => __( 'Position Type {#}', 'cmb2' ), // since version 1.1.4, {#} gets replaced by row number
-                'add_button'        => __( 'Add Another Position Type'  , 'cmb2' ),
-                'remove_button'     => __( 'Remove Position Type' , 'cmb2' ),
-                'sortable'          => true,
-                'closed'         => true, // true to have the groups closed by default
-                'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
-            ),
-        ) );
-
-        $option_page->add_group_field( $group_field_id, array(
-            "id"=>"wpid_position_type",
-            "type"=>"text_medium",
-            "name"=>"Position Type"
-        ));
-
-
-        $option_page->add_field(
-            array(
-            'id'=>'title_for_industry',
-            'type'=>'title',
-            'name'=> "Industry",
-            )
-        );
-
-        $group_field_id = $option_page->add_field( array(
-            'id'          => 'wpid_all_industry',
-            'type'        => 'group',
-            // 'repeatable'  => false, // use false if you want non-repeatable group
-            'options'     => array(
-                'group_title'       => __( 'Industry {#}', 'cmb2' ), // since version 1.1.4, {#} gets replaced by row number
-                'add_button'        => __( 'Add Another Industry'  , 'cmb2' ),
-                'remove_button'     => __( 'Remove Industry' , 'cmb2' ),
-                'sortable'          => true,
-                'closed'         => true, // true to have the groups closed by default
-                'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
-            ),
-        ) );
-
-        $option_page->add_group_field( $group_field_id, array(
-            "id"=>"wpid_industry",
-            "type"=>"text_medium",
-            "name"=>"Industry"
-        ));
-        
-        
-        */
-
      
 
         $group_fields = array( "introductory_question", "transitional_and_verification_question", "technical_question","closing_question" );
@@ -144,14 +75,13 @@
             $group_field_id = $option_page->add_field( array(
                 'id'          => 'wpid_all_' . $field_name . 's',
                 'type'        => 'group',
-                // 'repeatable'  => false, // use false if you want non-repeatable group
                 'options'     => array(
-                    'group_title'       => __( ucwords( str_replace( "_", " ", $field_name ) ) . ' {#}', 'cmb2' ), // since version 1.1.4, {#} gets replaced by row number
+                    'group_title'       => __( ucwords( str_replace( "_", " ", $field_name ) ) . ' {#}', 'cmb2' ), 
                     'add_button'        => __( 'Add Another Question', 'cmb2' ),
                     'remove_button'     => __( 'Remove Question', 'cmb2' ),
                     'sortable'          => true,
-                    'closed'         => true, // true to have the groups closed by default
-                    'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), // Performs confirmation before removing group.
+                    'closed'         => true,
+                    'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'cmb2' ), 
                 ),
             ) );
 

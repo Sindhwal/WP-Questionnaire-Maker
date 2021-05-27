@@ -5,10 +5,7 @@
  */
 
  class wpid_lib{
-    /* if( isset(  $_GET['post'] ) ){
-        var_dump( get_post_meta( $_GET['post'], 'wpid_submissions_type', true ) );
-    } */
-
+   
     /**
      * gather all questions from general options
      */
