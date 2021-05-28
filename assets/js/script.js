@@ -5,34 +5,34 @@ jQuery(document).ready(function ($) {
 
     window.wpid_selected_array = {};
 
-    $(document).on('click','#wpid-print-dive',function(et){
+    $(document).on('click', '#wpid-print-dive', function (et) {
         et.preventDefault();
         doc = window.open();
-        doc.document.write( $(".wpid-display-form .wpid-content").html() );
+        doc.document.write($(".wpid-display-form .wpid-content").html());
         doc.print();
         doc.close();
     });
 
-    $(document).on('click', '#wpid-email-dive', function( et ){
+    $(document).on('click', '#wpid-email-dive', function (et) {
         et.preventDefault();
         let $this = $(this);
         let id = $('.wpid-display-form .wpid-content').attr('data-post-id');
 
         $.ajax({
-            "url":wpid_data.ajaxurl,
-            "type":"POST",
-            "dataType":"JSON",
-            "data":{"action":"wpid_send_email","post_id":id},
-            "beforeSend":function(){
+            "url": wpid_data.ajaxurl,
+            "type": "POST",
+            "dataType": "JSON",
+            "data": { "action": "wpid_send_email", "post_id": id },
+            "beforeSend": function () {
                 $this.text("Sending...");
             }
-        }).then(function(d){
+        }).then(function (d) {
             console.log("Mail is sent!");
-            if( d.response == 200 ){
+            if (d.response == 200) {
                 alert("Check your registered email for the Questionnaire dive.");
                 $this.text("Sent!");
-                $this.attr("disabled","disabled");
-            }else{
+                $this.attr("disabled", "disabled");
+            } else {
                 alert("Something went wrong while sending an email.");
             }
 
@@ -49,51 +49,61 @@ jQuery(document).ready(function ($) {
         $("#wpid-questionnaire-container .form-card:not(.wpid-ajax-ignore)").each(
             function (index, Obj) {
                 let title = $(Obj).find("div .section-title").text();
-                
+
                 let selections = [];
                 $(Obj).find("div .wpid-main-container li input:checked").each(function (inde, oj) {
                     selections.push($(oj).val());
                 });
-                    window.wpid_selected_array[ title ] = selections ;
+                window.wpid_selected_array[title] = selections;
             }
         );
 
         let dive_type = $("input[name='wpid-drive-ask']:checked").val();
 
-        $this.attr("disabled","disabled");
-        
-         $(".wpid-back-btn").hide();
+        $this.attr("disabled", "disabled");
+
+        $(".wpid-back-btn").hide();
 
         $.ajax({
-            "url":wpid_data.ajaxurl,
-            "type":"POST",
-            "dataType":"JSON",
-            "data": { "action" : "wpid_generate_questionnaire_files","data" : JSON.stringify( window.wpid_selected_array ),"filename" : filename,"dive_type" : dive_type },
-            "beforeSend":function( res ){
+            "url": wpid_data.ajaxurl,
+            "type": "POST",
+            "dataType": "JSON",
+            "data": { "action": "wpid_generate_questionnaire_files", "data": JSON.stringify(window.wpid_selected_array), "filename": filename, "dive_type": dive_type },
+            "beforeSend": function (res) {
             }
-        }).complete(function(data){
+        }).complete(function (data) {
 
-            let emailBody = encodeURIComponent( $(".wpid-display-form .wpid-content").html() );
+            let isRedirect = $("#wpid-questionnaire-container").attr("data-redirect-enable");
+            let redirectURL = $("#wpid-questionnaire-container").attr("data-redirect-url");
+
+            if (isRedirect == "on" && redirectURL != "") {
+
+                window.location.href = redirectURL;
+
+            }
+
+
+            let emailBody = encodeURIComponent($(".wpid-display-form .wpid-content").html());
             $(".form-card.last-card").hide();
             $(".wpid-display-form").show();
 
             $.ajax({
-                "url":wpid_data.ajaxurl,
-                "type":"POST",
-                "dataType":"HTML",
-                "data": {"action":"wpid_display_created_form"},
-                "beforeSend":function(d){
+                "url": wpid_data.ajaxurl,
+                "type": "POST",
+                "dataType": "HTML",
+                "data": { "action": "wpid_display_created_form" },
+                "beforeSend": function (d) {
                     $(".wpid-display-form").append("<div class='temp-output'>Generating output</div>");
                 }
-            }).then(function(data){
+            }).then(function (data) {
                 $(".wpid-display-form .temp-output").remove();
                 $(".wpid-display-form #wpid-controller-container").after(data);
             });
 
-            $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-print-dive'>PRINT DIVE</a>" );
-            $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='"+fileurl+"'>SAVE AS PDF</a>" );
-            $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='"+fileurl.replace(".pdf",".docx") +"'>SAVE AS DOCX</a>" );
-            $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-email-dive'>EMAIL DIVE</a>" );
+            $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-print-dive'>PRINT DIVE</a>");
+            $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='" + fileurl + "'>SAVE AS PDF</a>");
+            $(".wpid-display-form #wpid-controller-container").append("<a download class='btn btn-primary' href='" + fileurl.replace(".pdf", ".docx") + "'>SAVE AS DOCX</a>");
+            $(".wpid-display-form #wpid-controller-container").append("<a class='btn btn-primary' href='#' id='wpid-email-dive'>EMAIL DIVE</a>");
 
         });
 
@@ -112,27 +122,27 @@ jQuery(document).ready(function ($) {
         let currentEl = $this.parents().find(".form-card.active");
         let Next = currentEl.next();
 
-        if( currentEl.find(".wpid-info-section").length > 0 ){
-            
+        if (currentEl.find(".wpid-info-section").length > 0) {
+
             let title = currentEl.find(".wpid-info-section #wpid-position-title").val();
             let position_type = currentEl.find(".wpid-info-section #wpid-position-type").val();
             let industry_name = currentEl.find(".wpid-info-section #wpid-industry-name").val();
-            
-            if( title == "" || position_type == "" || industry_name == "" ){
+
+            if (title == "" || position_type == "" || industry_name == "") {
                 alert("This form can not be left blank. All fields are required!");
                 return;
             }
 
 
             $.ajax({
-                "url":wpid_data.ajaxurl,
-                "type":"POST",
-                "dataType":"JSON",
-                "data":{ "action":"wpid_update_user_meta","wpid_position_title":title,"wpid_position_type":position_type,"wpid_industry":industry_name },
-                "beforeSend":function(d){
-                    
+                "url": wpid_data.ajaxurl,
+                "type": "POST",
+                "dataType": "JSON",
+                "data": { "action": "wpid_update_user_meta", "wpid_position_title": title, "wpid_position_type": position_type, "wpid_industry": industry_name },
+                "beforeSend": function (d) {
+
                 }
-            }).then(function(data){
+            }).then(function (data) {
 
             });
 
@@ -184,7 +194,7 @@ jQuery(document).ready(function ($) {
                     "data": { "action": "wpid_request_competencies_qa", "wp_nonce": wpid_data.wpid_nonce, "core_selections": window.wpid_competencies_request },
                     beforeSend: function (dt) {
                         $(".form-card.request-competencies").html("");
-                        
+
                     }
                 }).then(function (data) {
                     if (data == null) {
@@ -256,7 +266,7 @@ jQuery(document).ready(function ($) {
             $this.attr("disabled", "disabled");
         }
 
-        if ($(".wpid-conitue-btn").hide() ) {
+        if ($(".wpid-conitue-btn").hide()) {
             $(".wpid-conitue-btn").show();
             $(".submit-selected-qa").hide();
             $(".submit-selected-qa").removeAttr("disabled");

@@ -42,7 +42,10 @@ class wpid_shortcodes
 
         ob_start();
 
-        echo "<div id='wpid-questionnaire-container'>";
+        $enable_redirect = wpid_lib::general_options_array("wpid_redirect_enable");
+        $redirect_url = wpid_lib::general_options_array("wpid_redirect_url");
+
+        echo "<div id='wpid-questionnaire-container' data-redirect-enable='" . $enable_redirect . "' data-redirect-url='" . $redirect_url . "'>";
 
         if ($post_title == null && $post_type == null && $post_industry == null) {
             echo "<div class='form-card first-card active wpid-userinfo-section wpid-ajax-ignore'>";
@@ -119,7 +122,7 @@ class wpid_shortcodes
             //must not render anything on admin-side
             return false;
         }
-        
+
         $atts = shortcode_atts(array(
             'type' => 'personal',
             'per_page' => '10',
@@ -233,20 +236,26 @@ class wpid_shortcodes
     public function create_final_section()
     {
         ?>
-        <div><h2 class='section-title'>Would you be willing to share your interview Dive in our Community Library?</h2>
-            <ul class='wpid-main-container'>
-                    <li>
-                        <input data-slug="wpid-public-drive" value="public" type="radio" class="wpid-checkbox wpid-public-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-public-ask" selected/>
-                        <label class="wpid-label" for="wpid-public-ask">Yes! I'd be happy to share it in the Interview Drive Public Library</label>
-                    </li>
+<div>
+    <h2 class='section-title'>Would you be willing to share your interview Dive in our Community Library?</h2>
+    <ul class='wpid-main-container'>
+        <li>
+            <input data-slug="wpid-public-drive" value="public" type="radio"
+                class="wpid-checkbox wpid-public-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-public-ask"
+                selected />
+            <label class="wpid-label" for="wpid-public-ask">Yes! I'd be happy to share it in the Interview Drive Public
+                Library</label>
+        </li>
 
-                    <li>
-                        <input data-slug="wpid-private-drive" value="private" type="radio" class="wpid-checkbox wpid-private-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-private-ask" />
-                        <label class="wpid-label" for="wpid-private-ask">No. This should just be available in my personal Drive Library</label>
-                    </li>
-                </ul>
-            </div>
-        <?php
+        <li>
+            <input data-slug="wpid-private-drive" value="private" type="radio"
+                class="wpid-checkbox wpid-private-drive wpid-drive-ask" name="wpid-drive-ask" id="wpid-private-ask" />
+            <label class="wpid-label" for="wpid-private-ask">No. This should just be available in my personal Drive
+                Library</label>
+        </li>
+    </ul>
+</div>
+<?php
 }
 
     /**
@@ -257,19 +266,20 @@ class wpid_shortcodes
 
         ob_start();
         ?>
-        <div>
-        <h2 class="section-title">Position Info</h2>
-        <p>This information is only collected once and will be able to be managed in your profile after you complete your first assessment</p>
-            <div class="wpid-info-section">
-            <h3 class="section-ask">What Position Title are you hiring for?</h3>
-            <input type="text" id="wpid-position-title" class="form-control wpid-userinfo">
-            <h3 class="section-ask">Position Type</h3>
-            <input type="text" id="wpid-position-type" class="form-control wpid-userinfo">
-            <h3 class="section-ask">Industry</h3>
-            <input type="text" id="wpid-industry-name" class="form-control wpid-userinfo">
-            </div>
-        </div>
-        <?php
+<div>
+    <h2 class="section-title">Position Info</h2>
+    <p>This information is only collected once and will be able to be managed in your profile after you complete your
+        first assessment</p>
+    <div class="wpid-info-section">
+        <h3 class="section-ask">What Position Title are you hiring for?</h3>
+        <input type="text" id="wpid-position-title" class="form-control wpid-userinfo">
+        <h3 class="section-ask">Position Type</h3>
+        <input type="text" id="wpid-position-type" class="form-control wpid-userinfo">
+        <h3 class="section-ask">Industry</h3>
+        <input type="text" id="wpid-industry-name" class="form-control wpid-userinfo">
+    </div>
+</div>
+<?php
 
         return ob_get_clean();
     }
