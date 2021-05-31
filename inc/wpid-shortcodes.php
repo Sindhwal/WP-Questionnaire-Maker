@@ -44,8 +44,11 @@ class wpid_shortcodes
 
         $enable_redirect = wpid_lib::general_options_array("wpid_redirect_enable");
         $redirect_url = wpid_lib::general_options_array("wpid_redirect_url");
+        $redirect_btn_label = wpid_lib::general_options_array("wpid_redirect_btn_label");
 
-        echo "<div id='wpid-questionnaire-container' data-redirect-enable='" . $enable_redirect . "' data-redirect-url='" . $redirect_url . "'>";
+        $redirect_btn_label = $redirect_btn_label == "" ? "Continue" : $redirect_btn_label;
+
+        echo "<div id='wpid-questionnaire-container' data-redirect-enable='" . $enable_redirect . "' data-redirect-url='" . $redirect_url . "' data-redirect-label='" . $redirect_btn_label . "'>";
 
         if ($post_title == null && $post_type == null && $post_industry == null) {
             echo "<div class='form-card first-card active wpid-userinfo-section wpid-ajax-ignore'>";

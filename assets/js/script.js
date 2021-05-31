@@ -75,10 +75,17 @@ jQuery(document).ready(function ($) {
 
             let isRedirect = $("#wpid-questionnaire-container").attr("data-redirect-enable");
             let redirectURL = $("#wpid-questionnaire-container").attr("data-redirect-url");
+            let redirectBtnLabel = $("#wpid-questionnaire-container").attr("data-redirect-label");
 
             if (isRedirect == "on" && redirectURL != "") {
 
-                window.location.href = redirectURL;
+                // show Continue button if redirection is enabled
+                $this.text(redirectBtnLabel);
+                $this.removeClass("submit-selected-qa");
+                $this.removeAttr("disabled");
+                $this.on("click", function () {
+                    window.location.href = redirectURL;
+                });
 
             }
 

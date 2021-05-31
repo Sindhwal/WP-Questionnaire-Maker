@@ -77,6 +77,12 @@ class wpid_addition_fields
             'type' => 'text_url',
         ));
 
+        $option_page->add_field(array(
+            'name' => __('Redirect Button Label', 'cmb2'),
+            'id' => 'wpid_redirect_btn_label',
+            'type' => 'text',
+        ));
+
         $group_fields = array("introductory_question", "transitional_and_verification_question", "technical_question", "closing_question");
 
         foreach ($group_fields as $field_name) {
