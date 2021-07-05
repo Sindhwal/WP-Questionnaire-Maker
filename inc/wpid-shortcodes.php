@@ -60,9 +60,17 @@ class wpid_shortcodes
             echo "</div>";
         } else {
 
-            echo "<div class='form-card first-card active'>";
+            echo "<div class='form-card first-card active wpid-userinfo-section wpid-ajax-ignore'>";
+            echo $this->create_position_info($post_title,$post_type,$post_industry);
+            echo "</div>";
+
+            echo "<div class='form-card'>";
             echo $this->create_section_panel("Introductory Questions", "introductory_question", "wpid-intros");
             echo "</div>";
+
+/*             echo "<div class='form-card first-card active'>";
+            echo $this->create_section_panel("Introductory Questions", "introductory_question", "wpid-intros");
+            echo "</div>";  */
 
         }
 
@@ -264,7 +272,7 @@ class wpid_shortcodes
     /**
      * This will create a position info for the maker
      */
-    public function create_position_info()
+    public function create_position_info( $post_title = null ,$post_type = null ,$post_industry = null )
     {
 
         ob_start();
@@ -275,11 +283,11 @@ class wpid_shortcodes
         first assessment</p>
     <div class="wpid-info-section">
         <h3 class="section-ask">What Position Title are you hiring for?</h3>
-        <input type="text" id="wpid-position-title" class="form-control wpid-userinfo">
+        <input type="text" id="wpid-position-title" class="form-control wpid-userinfo" value=<?php echo $post_title ; ?> >
         <h3 class="section-ask">Position Type</h3>
-        <input type="text" id="wpid-position-type" class="form-control wpid-userinfo">
+        <input type="text" id="wpid-position-type" class="form-control wpid-userinfo" value=<?php echo $post_type; ?> >
         <h3 class="section-ask">Industry</h3>
-        <input type="text" id="wpid-industry-name" class="form-control wpid-userinfo">
+        <input type="text" id="wpid-industry-name" class="form-control wpid-userinfo" value=<?php echo $post_industry; ?> >
     </div>
 </div>
 <?php
