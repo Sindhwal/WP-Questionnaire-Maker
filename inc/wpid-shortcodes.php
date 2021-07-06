@@ -283,11 +283,70 @@ class wpid_shortcodes
         first assessment</p>
     <div class="wpid-info-section">
         <h3 class="section-ask">What Position Title are you hiring for?</h3>
-        <input type="text" id="wpid-position-title" class="form-control wpid-userinfo" value=<?php echo $post_title ; ?> >
+        <select id="wpid-position-title" class="form-control wpid-userinfo">
+        <?php
+        $job_title_ar = array(
+            "Board",
+            "Consultant",
+            "Customer Service",
+            "Director",
+            "Entry Level Associate",
+            "Executive",
+            "First Line Manager",
+            "Freelancer",
+            "High Level Individual Contributor",
+            "Laborer",
+            "Lead",
+            "Manager",
+            "Mid Level Individual Contributor",
+            "Sales",
+            "Volunteer"
+        );
+        foreach($job_title_ar as $title){
+            $title_selection = $post_title == $title ? "selected" : "";
+             echo "<option value='". $title ."' ". $title_selection .">". $title ."</option>";
+        }
+        ?>
+        </select>
         <h3 class="section-ask">Position Type</h3>
         <input type="text" id="wpid-position-type" class="form-control wpid-userinfo" value=<?php echo $post_type; ?> >
         <h3 class="section-ask">Industry</h3>
-        <input type="text" id="wpid-industry-name" class="form-control wpid-userinfo" value=<?php echo $post_industry; ?> >
+        <select id="wpid-industry-name" class="form-control wpid-userinfo">
+        <?php
+
+        $industry_ar = array(
+            "Architecture/Engineering",
+            "Arts, Media, Recreation",
+            "Construction",
+            "Consulting",
+            "Education",
+            "Facility Services/Pest Control/Lawn Service",
+            "Financial Services & Banking",
+            "Government",
+            "Hospitality",
+            "Information Technology",
+            "Insurance",
+            "Legal Services",
+            "Manufacturing",
+            "Marketing/Advertising",
+            "Medical or Dental Services",
+            "Nonprofit",
+            "Professional & Business Services",
+            "Religious Organizations",
+            "Retail",
+            "Telecommunications",
+            "Transportation & Logistics",
+            "Utilities/Energy",
+            "Warehousing & Distribution",
+            "Web, Design, or Writing Services",
+            "Other"
+        );
+        foreach($industry_ar as $title){
+            $title_selection = $post_industry == $title ? "selected" : "";
+             echo "<option value='". $title ."' ". $title_selection .">". $title ."</option>";
+        }
+        ?>
+        </select>
     </div>
 </div>
 <?php

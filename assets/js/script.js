@@ -131,9 +131,9 @@ jQuery(document).ready(function ($) {
 
         if (currentEl.find(".wpid-info-section").length > 0) {
 
-            let title = currentEl.find(".wpid-info-section #wpid-position-title").val();
+            let title = currentEl.find(".wpid-info-section #wpid-position-title :selected").val();
             let position_type = currentEl.find(".wpid-info-section #wpid-position-type").val();
-            let industry_name = currentEl.find(".wpid-info-section #wpid-industry-name").val();
+            let industry_name = currentEl.find(".wpid-info-section #wpid-industry-name :selected").val();
 
             if (title == "" || position_type == "" || industry_name == "") {
                 alert("This form can not be left blank. All fields are required!");
