@@ -12,7 +12,7 @@
      die("Wordpress enviornment not found!");
  }
 
- define("WPID_V", "1.0");
+ define("WPID_V", "1.2");
  define("WPID_FILE", __FILE__ );
  define("WPID_DIR", plugin_dir_path( WPID_FILE ) );
  define("WPID_URL", plugin_dir_url( WPID_FILE ) );
